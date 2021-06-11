@@ -27,6 +27,12 @@
     python3 dlmf_scraping_script.py
     ```
     
+    or use directly the command
+    
+      ```
+    dlmf-scrape
+    ```
+    
     The csv file has three columns:
     
     column 1: zbl_id (that is math_documents.zbl_id)

@@ -62,8 +62,18 @@ together_list.append(external_id)
 together_list.append(title)
 zipped_list = list(zip(*together_list))
 
+
 # Create the CSV file to be used as dataset (after storing it in the API)
-with open("dlmf_dataset_11_06_2021.csv", "w", newline="") as myfile:
-    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-    for each_line in zipped_list:
-        wr.writerow(each_line)
+def write_csv(scraping_data):
+    with open("dlmf_dataset_11_06_2021.csv", "w", newline="") as myfile:
+        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+        for each_line in scraping_data:
+            wr.writerow(each_line)
+
+
+def main():
+    write_csv(zipped_list)
+
+
+if __name__ == "__main__":
+    main()
