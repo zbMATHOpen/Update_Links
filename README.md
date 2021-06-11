@@ -21,3 +21,8 @@
     pip install -e .
     ```
 
+2) Run the code dlmf_scraping_script.py to generate the DLMF csv file.
+
+    ```
+    python3 dlmf_scraping_script.py
+    ```
