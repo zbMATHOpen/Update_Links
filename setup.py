@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="dlmf_scraping",
+    name="dlmf-scraping",
     version="0.1.0",
     mantainer="Dariush Ehsani, Matteo Petrera",
     maintainer_email="dariush@zbmath.org, matteo@zbmath.org",
@@ -17,7 +17,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        "console_scripts": ["dlmf-scrape=dlmf_pkg.dlmf_scraping_script:main"],
+        "console_scripts": ["dlmf-scrape=dlmf_scraping.dlmf_scraping_script:main"],
     },
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
