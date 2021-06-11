@@ -44,7 +44,9 @@ def scrape_page(letter):
                         if a_tag_ltx_ref_class["href"][0] == ".":
                             a_reference = a_tag_ltx_ref_class["href"][4:]
                             if not "bib" in a_reference:
-                                external_id.append(a_tag_ltx_ref_class["href"][4:])
+                                external_id.append(
+                                    a_tag_ltx_ref_class["href"][4:]
+                                )
                                 zbl_code.append(should_process_tuple[1])
                                 title.append(a_tag_ltx_ref_class["title"])
 
@@ -61,9 +63,7 @@ together_list.append(title)
 zipped_list = list(zip(*together_list))
 
 # Create the CSV file to be used as dataset (after storing it in the API)
-with open("dlmf_dataset_11_06_2021.csv", "w",
-          newline="") \
-        as myfile:
+with open("dlmf_dataset_11_06_2021.csv", "w", newline="") as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
     for each_line in zipped_list:
         wr.writerow(each_line)
