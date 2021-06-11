@@ -1,0 +1,30 @@
+*.pyc
+fromdate.txt
+.ropeproject/
+.coverage
+*.egg-info/
+*.eggs
+
+/env/*
+.env
+
+# backups
+*~
+**/*~
+
+#PyCharm
+.idea
+venv
+
+# logs
+*.log
+
+.*.sw?
+
+# config files
+*.ini
+
+*.csv
+
+
+
