@@ -17,7 +17,9 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        "console_scripts": ["dlmf-scrape=dlmf_scraping.dlmf_scraping_script:main"],
+        "console_scripts": [
+            "dlmf-scrape=dlmf_scraping.dlmf_scraping_script:main"
+        ],
     },
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
