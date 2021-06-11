@@ -26,3 +26,11 @@
     ```
     python3 dlmf_scraping_script.py
     ```
+    
+    The csv file has three columns:
+    
+    column 1: zbl_id (that is math_documents.zbl_id)
+    
+    column 2: external_id (that is zb_links.source.id and document_external_ids.external_id)
+    
+    column 3: title (that is zb_links.source.title)
