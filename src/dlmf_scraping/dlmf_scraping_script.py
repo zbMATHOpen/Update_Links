@@ -45,17 +45,19 @@ def scrape_page(letter):
                     if a_tag_ltx_ref_class and \
                             len(a_tag_ltx_ref_class["class"]) == 1:
                         if a_tag_ltx_ref_class["href"][0] == ".":
-                            a_reference = a_tag_ltx_ref_class["href"][4:]
+                            a_reference = a_tag_ltx_ref_class["href"][5:]
                             if not "bib" in a_reference:
-                                external_id.append(
-                                    a_tag_ltx_ref_class["href"][4:]
-                                )
+                                external_id.append(a_reference)
                                 zbl_code.append(should_process_tuple[1])
-                                title.append(a_tag_ltx_ref_class["title"])
+                                tit = a_tag_ltx_ref_class["title"]
+                                if "About" in tit:
+                                    title.append(tit[:-20])
+                                else:
+                                    title.append(tit)
 
 
 upper_list = list(string.ascii_uppercase)
-for each_letter in upper_list:
+for each_letter in upper_list[0]:
     scrape_page(each_letter)
 
 # Prepare lists to form columns of the CSV file
