@@ -70,7 +70,9 @@ zipped_list = list(zip(*together_list))
 
 # Create the CSV file to be used as dataset (after storing it in the API)
 def write_csv(scraping_data):
-    with open(f"dlmf_dataset_{today}", "w", newline="") as myfile:
+    with open(
+            f"dlmf_dataset_{today}", "w", newline=""
+    ) as myfile:
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
         for each_line in scraping_data:
             wr.writerow(each_line)
