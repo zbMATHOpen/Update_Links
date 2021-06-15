@@ -49,8 +49,12 @@ together_list.append(zbl_code)
 together_list.append(dlmf_id)
 zipped_list = list(zip(*together_list))
 
-with open("dlmf_dataset_2021.csv", "w", newline="") \
-        as myfile:
-    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-    for each_line in zipped_list:
-        wr.writerow(each_line)
+
+def write_csv_2021():
+    with open("dlmf_dataset_2021.csv", "w", newline="") as myfile:
+        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+        for each_line in zipped_list:
+            wr.writerow(each_line)
+
+
+write_csv_2021()
