@@ -11,7 +11,6 @@ import scrape_dlmf_2017
 import scrape_dlmf_2018
 import scrape_dlmf_2019
 import scrape_dlmf_2020
-import scrape_dlmf_2021
 
 if __name__ == "__main__":
     scrape_dlmf_2008.write_csv_2008()
@@ -27,4 +26,3 @@ if __name__ == "__main__":
     scrape_dlmf_2018.write_csv_2018()
     scrape_dlmf_2019.write_csv_2019()
     scrape_dlmf_2020.write_csv_2020()
-    scrape_dlmf_2021.write_csv_2021()
