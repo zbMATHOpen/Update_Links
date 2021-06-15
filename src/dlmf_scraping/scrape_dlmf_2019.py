@@ -52,7 +52,7 @@ zipped_list = list(zip(*together_list))
 
 
 def write_csv_2019():
-    with open("dlmf_dataset_2019.csv", "w", newline="") as myfile:
+    with open("csv_files/dlmf_dataset_2019.csv", "w", newline="") as myfile:
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
         for each_line in zipped_list:
             wr.writerow(each_line)

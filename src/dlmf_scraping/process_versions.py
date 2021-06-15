@@ -18,12 +18,12 @@ name_dict[count] = "dlmf_dataset_" + str(version_date.year) + ".csv"
 
 column_names = ["zbl_code", "source_val"]
 
-old_file_path = "scraping_results/" + name_dict[0]
+old_file_path = "historical_scrapings/" + name_dict[0]
 df_old = pd.read_csv(old_file_path, engine="python", names=column_names,
                      index_col=False)
 df_old = df_old[["zbl_code", "source_val"]]
 
-old_file_path = 'scraping_results/' + name_dict[0]
+old_file_path = "historical_scrapings/" + name_dict[0]
 df_old = pd.read_csv(old_file_path, engine="python", names=column_names,
                      index_col=False)
 df_old = df_old[['zbl_code', 'source_val']]
@@ -35,7 +35,7 @@ df_date_added["date_added"] = name_dict[0].split(".csv")[0][-4:]
 number_versions = len(name_dict)
 
 for i in range(number_versions - 1):
-    new_file_path = "scraping_results/" + name_dict[i + 1]
+    new_file_path = "historical_scrapings/" + name_dict[i + 1]
     df_new = pd.read_csv(new_file_path, engine="python", names=column_names,
                          index_col=False)
     df_new = df_new[["zbl_code", "source_val"]]

@@ -20,7 +20,7 @@ def process_dl(a_dl):
 def scrape_page(letter):
     if letter == "A":
         letter = ""
-    source = requests.get("https://web.archive.org/web/20131127014548/"
+    source = requests.get("https://web.archive.org/web/20171111221944/"
                           "http://dlmf.nist.gov/bib" + "/" + letter)
     html_text = source.text
     soup = BeautifulSoup(html_text, "html.parser")
@@ -51,11 +51,11 @@ together_list.append(dlmf_id)
 zipped_list = list(zip(*together_list))
 
 
-def write_csv_2013():
-    with open("dlmf_dataset_2013.csv", "w", newline="") as myfile:
+def write_csv_2017():
+    with open("csv_files/dlmf_dataset_2017.csv", "w", newline="") as myfile:
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
         for each_line in zipped_list:
             wr.writerow(each_line)
 
 
-write_csv_2013()
+write_csv_2017()

@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# Code to scrape the DLMF bibliography and create a CSV dataset
+# Code to scrape the 2021 DLMF bibliography and create a CSV dataset
 # ------------------------------------------------------------------------------
 
 from bs4 import BeautifulSoup
@@ -10,13 +10,11 @@ import csv
 
 today = date.today()
 
-# Columns to be created
 external_id = []
 title = []
 zbl_code = []
 
 
-# Procedure to select only those rows in the html source with zbmath.org/
 def process_dl(a_dl):
     dds = a_dl.find_all("dd")
     for a_dd in dds:
@@ -27,7 +25,6 @@ def process_dl(a_dl):
     return False, ""
 
 
-# Scraping procedure to extract the 4 desired columns to appear in the CSV file
 def scrape_page(letter):
     if letter == "A":
         letter = ""
@@ -57,10 +54,9 @@ def scrape_page(letter):
 
 
 upper_list = list(string.ascii_uppercase)
-for each_letter in upper_list:
+for each_letter in upper_list[5]:
     scrape_page(each_letter)
 
-# Prepare lists to form columns of the CSV file
 together_list = []
 together_list.append(zbl_code)
 together_list.append(external_id)
@@ -68,19 +64,11 @@ together_list.append(title)
 zipped_list = list(zip(*together_list))
 
 
-# Create the CSV file to be used as dataset (after storing it in the API)
-def write_csv(scraping_data):
-    with open(
-            f"dlmf_dataset_{today}", "w", newline=""
-    ) as myfile:
+def write_csv_2021():
+    with open("csv_files/dlmf_dataset_2021.csv", "w", newline="") as myfile:
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        for each_line in scraping_data:
+        for each_line in zipped_list:
             wr.writerow(each_line)
 
 
-def main():
-    write_csv(zipped_list)
-
-
-if __name__ == "__main__":
-    main()
+write_csv_2021()

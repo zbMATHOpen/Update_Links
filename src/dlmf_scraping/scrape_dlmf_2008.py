@@ -7,13 +7,13 @@ dlmf_id = []
 zbl_code = []
 
 
-def process_dl(a_dl):
-    dds = a_dl.find_all("dd")
-    for a_dd in dds:
-        a_tag_list = a_dd.find_all("a", {"class": "zbl"})
-        for a_tag in a_tag_list:
-            if a_tag:
-                return True, a_tag["href"].split("an:")[1]
+def process_li(a_li):
+    div_list = a_li.find_all("div", {"class": "bibblock"})
+    for a_div in div_list:
+        a_list = a_div.find_all("a", {"class": "zbl"})
+        for a_hit in a_list:
+            if a_hit:
+                return True, a_hit["href"].split("an:")[1]
     return False, ""
 
 
@@ -21,26 +21,25 @@ def scrape_page(letter):
     if letter == "A":
         letter = ""
     source = requests.get(
-        "https://web.archive.org/web/20111021085410/http:"
+        "https://web.archive.org/web/20080812084157/http:"
         "//dlmf.nist.gov/bib/" + "/" + letter)
     html_text = source.text
     soup = BeautifulSoup(html_text, features="html.parser")
 
-    dls = soup.find_all("dl")
+    lis = soup.find_all("li", {"class": "bibitem"})
 
-    for a_dl in dls:
-        should_process_tuple = process_dl(a_dl)
+    for a_li in lis:
+        should_process_tuple = process_li(a_li)
 
         if should_process_tuple[0]:
+            div_list = a_li.find_all("div", {"class": "bibblock"})
 
-            dds = a_dl.find_all("dd")
-
-            for a_dd in dds:
-                a_tag_list = a_dd.find_all("a", {"class": "ref citedby"})
+            for a_div_hit in div_list:
+                a_tag_list = a_div_hit.find_all("a", {"class": "ref"})
 
                 for a_tag_cited_class in a_tag_list:
-
-                    if "dlmf.nist.gov" in a_tag_cited_class["href"]:
+                    if (len(a_tag_cited_class['class']) == 1
+                            and "dlmf.nist.gov" in a_tag_cited_class["href"]):
                         zbl_code.append(should_process_tuple[1])
                         dlmf_id.append(a_tag_cited_class["href"].split(
                             "dlmf.nist.gov")[1])
@@ -56,11 +55,11 @@ together_list.append(dlmf_id)
 zipped_list = list(zip(*together_list))
 
 
-def write_csv_2011():
-    with open("dlmf_dataset_2011.csv", "w", newline="") as myfile:
+def write_csv_2008():
+    with open("csv_files/dlmf_dataset_2008.csv", "w", newline="") as myfile:
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
         for each_line in zipped_list:
             wr.writerow(each_line)
 
 
-write_csv_2011()
+write_csv_2008()
