@@ -45,16 +45,12 @@ upper_list = list(string.ascii_uppercase)
 for each_letter in upper_list:
     scrape_page(each_letter)
 
-print(len(zbl_code))
-print(len(dlmf_id))
-
 together_list = []
 together_list.append(zbl_code)
 together_list.append(dlmf_id)
-
 zipped_list = list(zip(*together_list))
 
-with open("scraping_results/dlmf_dataset_2020.csv", "w", newline="") as myfile:
+with open("dlmf_dataset_2020.csv", "w", newline="") as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
     for each_line in zipped_list:
         wr.writerow(each_line)

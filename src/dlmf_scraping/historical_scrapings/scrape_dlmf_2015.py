@@ -13,14 +13,15 @@ def process_dl(a_dl):
         a_tag_list = a_dd.find_all("a", {"class": "zbl"})
         for a_tag in a_tag_list:
             if a_tag:
-                return True, a_tag["href"].split("zbmath.org/")[1]
+                return True, a_tag["href"].split("an:")[1]
     return False, ""
 
 
 def scrape_page(letter):
     if letter == "A":
         letter = ""
-    source = requests.get("https://dlmf.nist.gov/bib" + "/" + letter)
+    source = requests.get("https://web.archive.org/web/20151218103036/"
+                          "http://dlmf.nist.gov/bib" + "/" + letter)
     html_text = source.text
     soup = BeautifulSoup(html_text, "html.parser")
 
@@ -34,10 +35,10 @@ def scrape_page(letter):
                 a_tag_list = a_dd.find_all("a", {"class": "ltx_ref"})
                 for a_tag_cited_class in a_tag_list:
 
-                    if ".././" in a_tag_cited_class["href"]:
+                    if "dlmf.nist.gov" in a_tag_cited_class["href"]:
                         zbl_code.append(should_process_tuple[1])
-                        dlmf_id.append(a_tag_cited_class["href"]
-                                       .split("../.")[1])
+                        dlmf_id.append(a_tag_cited_class["href"].split(
+                            "dlmf.nist.gov")[1])
 
 
 upper_list = list(string.ascii_uppercase)
@@ -49,8 +50,7 @@ together_list.append(zbl_code)
 together_list.append(dlmf_id)
 zipped_list = list(zip(*together_list))
 
-with open("dlmf_dataset_2021.csv", "w", newline="") \
-        as myfile:
+with open("dlmf_dataset_2015.csv", "w", newline="") as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
     for each_line in zipped_list:
         wr.writerow(each_line)
