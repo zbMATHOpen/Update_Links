@@ -16,7 +16,7 @@ while version_date < end_date:
 
 name_dict[count] = "dlmf_dataset_" + str(version_date.year) + ".csv"
 
-column_names = ["zbl_code", "source_val"]
+column_names = ["zbl_id", "external_id", "title"]
 
 old_file_path = "csv_files/" + name_dict[0]
 
@@ -27,13 +27,13 @@ df_old = pd.read_csv(
     index_col=False
 )
 
-df_old = df_old[["zbl_code", "source_val"]]
+df_old = df_old[["zbl_id", "external_id", "title"]]
 
-df_old = df_old.drop_duplicates(subset=["zbl_code", "source_val"])
+df_old = df_old.drop_duplicates(subset=["zbl_id", "external_id", "title"])
 
-df_date_added = df_old[["zbl_code", "source_val"]]
+df_date_added = df_old[["zbl_id", "external_id", "title"]]
 
-df_date_added["date_added"] = name_dict[0].split(".csv")[0][-4:]
+df_date_added["created_at"] = name_dict[0].split(".csv")[0][-4:]
 
 number_versions = len(name_dict)
 
@@ -45,22 +45,22 @@ for i in range(number_versions - 1):
         names=column_names,
         index_col=False
     )
-    df_new = df_new[["zbl_code", "source_val"]]
-    df_new["date_added"] = name_dict[i + 1].split(".csv")[0][-4:]
-    df_new = df_new.drop_duplicates(subset=["zbl_code", "source_val"])
+    df_new = df_new[["zbl_id", "external_id", "title"]]
+    df_new["created_at"] = name_dict[i + 1].split(".csv")[0][-4:]
+    df_new = df_new.drop_duplicates(subset=["zbl_id", "external_id", "title"])
     df_link_insert = pd.concat([df_new, df_old, df_old]).drop_duplicates(
-        subset=["zbl_code", "source_val"], keep=False)
+        subset=["zbl_id", "external_id", "title"], keep=False)
     df_link_delete = pd.concat([df_old, df_new, df_new]).drop_duplicates(
-        subset=["zbl_code", "source_val"],
+        subset=["zbl_id", "external_id", "title"],
         keep=False
     )
     df_date_added = pd.concat(
         [df_date_added, df_link_delete, df_link_delete]).drop_duplicates(
-        subset=["zbl_code", "source_val"],
+        subset=["zbl_id", "external_id", "title"],
         keep=False
     )
     df_date_added = pd.concat([df_date_added, df_link_insert]).drop_duplicates(
-        subset=["zbl_code", "source_val"]
+        subset=["zbl_id", "external_id", "title"]
     )
     df_old = df_new
 
