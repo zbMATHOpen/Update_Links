@@ -54,7 +54,7 @@ def scrape_page(letter):
 
 
 upper_list = list(string.ascii_uppercase)
-for each_letter in upper_list[5]:
+for each_letter in upper_list:
     scrape_page(each_letter)
 
 together_list = []

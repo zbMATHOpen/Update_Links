@@ -38,7 +38,7 @@ def scrape_page(letter):
                     if "dlmf.nist.gov" in a_tag_cited_class["href"]:
                         zbl_code.append(should_process_tuple[1])
                         dlmf_id.append(a_tag_cited_class["href"].split(
-                            "dlmf.nist.gov")[1])
+                            "dlmf.nist.gov")[1][1:])
 
 
 upper_list = list(string.ascii_uppercase)
