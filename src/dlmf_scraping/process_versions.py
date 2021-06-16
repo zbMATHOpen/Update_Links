@@ -5,7 +5,7 @@ import pandas as pd
 name_dict = dict()
 
 start_date = datetime.date(2008, 1, 1)
-end_date = datetime.date(2020, 1, 1)
+end_date = datetime.date(2021, 1, 1)
 
 version_date = start_date
 count = 0

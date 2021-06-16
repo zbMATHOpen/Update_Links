@@ -21,16 +21,24 @@
     pip install -e .
     ```
 
-2) Run the code dlmf_scraping_script.py to generate the DLMF csv file.
+2) Entry points:
 
-    ```
-    python3 dlmf_scraping_script.py
-    ```
-    
-    or use directly the command
+   To scrape the current 2021 DLMF and generate the csv file:
     
       ```
-    dlmf-scrape
+    dlmf-csv-2021
+    ```
+   
+   To scrape the old DLMFs (2008-2020) and generate the csv files:
+    
+      ```
+    dlmf-csv-older
+    ```
+   
+   To generate the final csv files with dates:
+    
+      ```
+    dlmf-csv-final
     ```
     
     The csv file has three columns:
@@ -40,3 +48,5 @@
     column 2: external_id (that is zb_links.source.id and document_external_ids.external_id)
     
     column 3: title (that is zb_links.source.title)
+   
+    column 4: created_at (that is document_external_ids.created_at)

@@ -1,5 +1,4 @@
 
 requests
-dateutil
 pandas
 bs4

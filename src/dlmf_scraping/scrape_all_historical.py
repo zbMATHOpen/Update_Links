@@ -12,7 +12,8 @@ import scrape_dlmf_2018
 import scrape_dlmf_2019
 import scrape_dlmf_2020
 
-if __name__ == "__main__":
+
+def write_csv_older():
     scrape_dlmf_2008.write_csv_2008()
     scrape_dlmf_2009.write_csv_2009()
     scrape_dlmf_2010.write_csv_2010()
@@ -26,3 +27,7 @@ if __name__ == "__main__":
     scrape_dlmf_2018.write_csv_2018()
     scrape_dlmf_2019.write_csv_2019()
     scrape_dlmf_2020.write_csv_2020()
+
+
+if __name__ == "__main__":
+    write_csv_older()
