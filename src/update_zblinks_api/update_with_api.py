@@ -1,4 +1,3 @@
-
 import click
 import requests
 import os
@@ -85,7 +84,7 @@ def update_request(input_data, partner):
                   "external id": input_data[1],
                   "partner": partner,
                   "title": input_data[3]}
-    dict_input = {k:v for k,v in dict_input.items() if v}
+    dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
     requests.patch(link_url, json=dict_input, headers=headers)
@@ -144,17 +143,17 @@ def separate_links(partner, df_ext_partner, df_scrape):
         those entries from df_ext_partner which are to be deleted.
 
     """
-    df_edit = pd.DataFrame(columns=(["document","external_id","title"]))
+    df_edit = pd.DataFrame(columns=(["document", "external_id", "title"]))
 
     # those links in df_scrape which are not in the matrix
     df_new = pd.concat(
-        [df_scrape,df_ext_partner,df_ext_partner]
+        [df_scrape, df_ext_partner, df_ext_partner]
     ).drop_duplicates(keep=False)
 
     # those links in the matrix which are not
     # in df_scrape, and are not one of the links to update
     df_delete = pd.concat(
-        [df_ext_partner,df_scrape,df_scrape]
+        [df_ext_partner, df_scrape, df_scrape]
     ).drop_duplicates(keep=False)
 
     # to update:
@@ -165,24 +164,24 @@ def separate_links(partner, df_ext_partner, df_scrape):
 
     # check if already exists in database
     df_exists = pd.merge(df_ext_partner, df_scrape,
-                         on=["document","external_id"],
+                         on=["document", "external_id"],
                          how="inner")
 
     df_exists["title_doc_ext_ids"] = df_exists[
-        "document","external_id"
+        "document", "external_id"
     ].apply(lambda x: source_helpers.get_titles(x, partner))
     df_exists = df_exists[df_exists["title_doc_ext_ids"] != df_exists["title"]]
 
     # if title is different add patch
     df_exists = pd.concat(
-        [df_exists,df_ext_partner,df_ext_partner]
-    ).drop_duplicates(subset=["document","external_id"],keep=False)
+        [df_exists, df_ext_partner, df_ext_partner]
+    ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
     df_edit = pd.concat([df_edit, df_exists])
 
     df_new = pd.concat(
-        [df_new,df_exists,df_exists]
-    ).drop_duplicates(subset=["document","external_id"],keep=False)
+        [df_new, df_exists, df_exists]
+    ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
     return df_new, df_edit, df_delete
 
@@ -213,8 +212,8 @@ def scrape(partner):
 @click.option(
     "--file", is_flag=True,
     help="Use this option to write the data to csv files"
-    " instead of writing to the matrix"
-    "new_links.csv, to_edit.csv, delete_links.csv will be created"
+         " instead of writing to the matrix"
+         "new_links.csv, to_edit.csv, delete_links.csv will be created"
 )
 def update(file):
     """
@@ -231,7 +230,7 @@ def update(file):
         df_scrape = scrape(partner)
 
         df_doc_ext_id = get_doc_ext_id_links()
-        df_ext_partner = df_doc_ext_id[df_doc_ext_id["type"]==partner]
+        df_ext_partner = df_doc_ext_id[df_doc_ext_id["type"] == partner]
 
         df_new, df_edit, df_delete = separate_links(
             partner, df_ext_partner, df_scrape

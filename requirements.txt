@@ -1,4 +1,6 @@
 
+click
 requests
-pandas
 bs4
+pandas
+psycopg2
