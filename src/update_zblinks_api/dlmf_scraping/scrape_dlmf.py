@@ -1,18 +1,13 @@
 # ------------------------------------------------------------------------------
-# Code to scrape the 2021 DLMF bibliography and create a CSV dataset
+# Code to scrape the 2021 DLMF bibliography and create a Pandas dataframe
 # ------------------------------------------------------------------------------
 
+import pandas as pd
 from bs4 import BeautifulSoup
-from datetime import date
+from typing import List
 import requests
 import string
 import csv
-
-today = date.today()
-
-external_id = []
-title = []
-zbl_code = []
 
 
 def process_dl(a_dl):
@@ -25,7 +20,7 @@ def process_dl(a_dl):
     return False, ""
 
 
-def scrape_page(letter):
+def scrape_page(letter, external_id: List, title: List, zbl_code: List):
     if letter == "A":
         letter = ""
     source = requests.get("https://dlmf.nist.gov/bib" + "/" + letter)
@@ -53,22 +48,36 @@ def scrape_page(letter):
                                     title.append(title_tag)
 
 
-upper_list = list(string.ascii_uppercase)
-for each_letter in upper_list:
-    scrape_page(each_letter)
-
-together_list = []
-together_list.append(zbl_code)
-together_list.append(external_id)
-together_list.append(title)
-zipped_list = list(zip(*together_list))
+def get_dataframe(zipped_list: List):
+    df = pd.DataFrame.from_records(
+        data=zipped_list,
+        columns=["zbl_code", "external_id", "title"]
+    )
+    return df
 
 
-def write_csv_2021():
-    with open("csv_files/dlmf_dataset_2021.csv", "w", newline="") as myfile:
-        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        for each_line in zipped_list:
-            wr.writerow(each_line)
+def get_df_dlmf():
+    external_id = []
+    title = []
+    zbl_code = []
 
+    upper_list = list(string.ascii_uppercase)
+    for each_letter in upper_list[0:1]:
+        scrape_page(
+            letter=each_letter,
+            external_id=external_id,
+            title=title,
+            zbl_code=zbl_code
+        )
 
-write_csv_2021()
+    together_list = []
+    together_list.append(zbl_code)
+    together_list.append(external_id)
+    together_list.append(title)
+    zipped_list = list(zip(*together_list))
+
+    df = get_dataframe(zipped_list=zipped_list)
+    return df
+
+if __name__ == "__main__":
+    get_df_dlmf()
