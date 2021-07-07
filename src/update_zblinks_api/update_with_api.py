@@ -6,6 +6,7 @@ import psycopg2
 
 from update_zblinks_api import params_dict, partners, link_url
 from update_zblinks_api.helpers import dlmf_helpers, source_helpers
+from update_zblinks_api.dlmf_scraping import scrape_dlmf
 
 
 def get_doc_ext_id_links():
@@ -204,7 +205,7 @@ def scrape(partner):
     """
     # TODO: needs to be implemented
     # scrape the desired partner and return a DataFrame with the current info
-    df_scrape = get_df_dlmf()
+    df_scrape = scrape_dlmf.get_df_dlmf()
     return df_scrape
 
 

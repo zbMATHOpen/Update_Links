@@ -62,7 +62,7 @@ def get_df_dlmf():
     zbl_code = []
 
     upper_list = list(string.ascii_uppercase)
-    for each_letter in upper_list[0:1]:
+    for each_letter in upper_list:
         scrape_page(
             letter=each_letter,
             external_id=external_id,
@@ -78,6 +78,3 @@ def get_df_dlmf():
 
     df = get_dataframe(zipped_list=zipped_list)
     return df
-
-if __name__ == "__main__":
-    get_df_dlmf()
