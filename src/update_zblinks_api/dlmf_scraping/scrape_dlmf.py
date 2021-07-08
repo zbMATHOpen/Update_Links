@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from typing import List
 import requests
 import string
-import csv
 
 
 def process_dl(a_dl):
@@ -56,7 +55,7 @@ def get_dataframe(zipped_list: List):
     return df
 
 
-def get_df_dlmf():
+def get_df_dlmf_2021():
     external_id = []
     title = []
     zbl_code = []

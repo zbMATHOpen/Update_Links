@@ -1,10 +1,9 @@
+
+import pandas as pd
 from bs4 import BeautifulSoup
+from typing import List
 import requests
 import string
-import csv
-
-dlmf_id = []
-zbl_code = []
 
 
 def process_li(a_li):
@@ -17,7 +16,7 @@ def process_li(a_li):
     return False, ""
 
 
-def scrape_page(letter):
+def scrape_page(letter, external_id: List, zbl_code: List):
     if letter == "A":
         letter = ""
     source = requests.get(
@@ -38,28 +37,40 @@ def scrape_page(letter):
                 a_tag_list = a_div_hit.find_all("a", {"class": "ref"})
 
                 for a_tag_cited_class in a_tag_list:
-                    if (len(a_tag_cited_class['class']) == 1
+                    if (len(a_tag_cited_class["class"]) == 1
                             and "dlmf.nist.gov" in a_tag_cited_class["href"]):
                         zbl_code.append(should_process_tuple[1])
-                        dlmf_id.append(a_tag_cited_class["href"].split(
+                        external_id.append(a_tag_cited_class["href"].split(
                             "dlmf.nist.gov")[1][1:])
 
 
-upper_list = list(string.ascii_uppercase)
-for each_letter in upper_list:
-    scrape_page(each_letter)
-
-together_list = []
-together_list.append(zbl_code)
-together_list.append(dlmf_id)
-zipped_list = list(zip(*together_list))
+def get_dataframe(zipped_list: List):
+    df = pd.DataFrame.from_records(
+        data=zipped_list,
+        columns=["zbl_code", "external_id"]
+    )
+    return df
 
 
-def write_csv_2008():
-    with open("csv_files/dlmf_dataset_2008.csv", "w", newline="") as myfile:
-        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        for each_line in zipped_list:
-            wr.writerow(each_line)
+def get_df_dlmf_2008():
+    external_id = []
+    zbl_code = []
+
+    upper_list = list(string.ascii_uppercase)
+    for each_letter in upper_list:
+        scrape_page(
+            letter=each_letter,
+            external_id=external_id,
+            zbl_code=zbl_code
+        )
+
+    together_list = []
+    together_list.append(zbl_code)
+    together_list.append(external_id)
+    zipped_list = list(zip(*together_list))
+
+    df = get_dataframe(zipped_list=zipped_list)
+    return df
 
 
-write_csv_2008()
+get_df_dlmf_2008()

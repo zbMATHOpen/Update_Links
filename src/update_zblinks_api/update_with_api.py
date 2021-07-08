@@ -205,7 +205,7 @@ def scrape(partner):
     """
     # TODO: needs to be implemented
     # scrape the desired partner and return a DataFrame with the current info
-    df_scrape = scrape_dlmf.get_df_dlmf()
+    df_scrape = scrape_dlmf.get_df_dlmf_2021()
     return df_scrape
 
 
