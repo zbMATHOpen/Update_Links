@@ -148,14 +148,14 @@ def separate_links(partner, df_ext_partner, df_scrape):
 
     # those links in df_scrape which are not in the matrix
     df_new = pd.concat(
-        [df_scrape, df_ext_partner, df_ext_partner]
-    ).drop_duplicates(keep=False)
+        [df_scrape,df_ext_partner,df_ext_partner]
+    ).drop_duplicates(subset=["document","external_id"], keep=False)
 
     # those links in the matrix which are not
     # in df_scrape, and are not one of the links to update
     df_delete = pd.concat(
         [df_ext_partner, df_scrape, df_scrape]
-    ).drop_duplicates(keep=False)
+    ).drop_duplicates(subset=["document","external_id"], keep=False)
 
     # to update:
     if partner == "DLMF":
@@ -169,7 +169,7 @@ def separate_links(partner, df_ext_partner, df_scrape):
                          how="inner")
 
     df_exists["title_doc_ext_ids"] = df_exists[
-        "document", "external_id"
+        ["document", "external_id"]
     ].apply(lambda x: source_helpers.get_titles(x, partner))
     df_exists = df_exists[df_exists["title_doc_ext_ids"] != df_exists["title"]]
 

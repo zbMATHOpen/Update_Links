@@ -65,16 +65,16 @@ def update(df_ext_partner, df_new, df_delete):
         on=["document","permalink"],
         how="inner"
     )
+
     permalinks_delete_series = df_delete["external_id"].map(
         get_permalinks
     )
     df_same_permalink = df_same_permalink[
-        df_same_permalink["external_id_y"].isin(permalinks_delete_series)
+        df_same_permalink["external_id_x"].isin(permalinks_delete_series)
     ]
-    df_edit = df_same_permalink[["document_y","external_id_y","title"]]
+    df_edit = df_same_permalink[["document","external_id_y"]]
     df_edit = df_edit.rename(
         columns={
-            "document_y": "document",
             "external_id": "external_id"
         }
     )
