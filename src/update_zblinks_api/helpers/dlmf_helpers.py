@@ -17,8 +17,14 @@ def get_permalinks(ext_id):
         change, permalink remains the same.
 
     """
-    permalink = None
-    return permalink
+    ext_id_parts = ext_id.split("#")
+    if len(ext_id_parts) == 1:
+        return ext_id
+
+    prefix = ext_id_parts[0]
+    suffix = ext_id_parts[1]
+    suffix_first_dot_split = suffix.split(".", 2)
+    return prefix + "#" + suffix_first_dot_split[0]
 
 
 def update(df_ext_partner, df_new, df_delete):
@@ -66,21 +72,21 @@ def update(df_ext_partner, df_new, df_delete):
         how="inner"
     )
 
-    permalinks_delete_series = df_delete["external_id"].map(
-        get_permalinks
-    )
     df_same_permalink = df_same_permalink[
-        df_same_permalink["external_id_x"].isin(permalinks_delete_series)
+        df_same_permalink["external_id_x"].isin(df_delete["external_id"])
     ]
+    df_remove_from_delete = df_same_permalink[
+        ["document","external_id_x"]
+    ].rename(columns={"external_id_x": "external_id"})
     df_edit = df_same_permalink[["document","external_id_y"]]
     df_edit = df_edit.rename(
         columns={
-            "external_id": "external_id"
+            "external_id_y": "external_id"
         }
     )
 
     df_delete = pd.concat(
-        [df_delete,df_edit,df_edit]
+        [df_delete,df_remove_from_delete,df_remove_from_delete]
     ).drop_duplicates(subset=["document","external_id"],keep=False)
 
     df_new = pd.concat(

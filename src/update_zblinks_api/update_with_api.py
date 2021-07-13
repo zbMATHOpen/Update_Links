@@ -159,7 +159,7 @@ def separate_links(partner, df_ext_partner, df_scrape):
 
     # to update:
     if partner == "DLMF":
-        df_edit, df_new, df_delete = dlmf_helpers.update(
+        df_new, df_edit, df_delete = dlmf_helpers.update(
             df_ext_partner, df_new, df_delete
         )
 

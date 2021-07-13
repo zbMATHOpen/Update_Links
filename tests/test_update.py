@@ -14,13 +14,13 @@ def test_separation():
     )
 
     assert len(df_new.index) == 1
-    assert 1357 in df_new["document"]
+    assert 1357 in df_new["document"].to_list()
 
     assert len(df_edit.index) == 1
-    assert "abcd#i.p5" in df_edit["external_id"]
+    assert "abcd#i.p5" in df_edit["external_id"].to_list()
 
     assert len(df_delete.index) == 1
-    assert "abcd#i.p5" in df_delete["external_id"]
+    assert "ghij" in df_delete["external_id"].to_list()
 
 
 def test_title_change_on_edit():
