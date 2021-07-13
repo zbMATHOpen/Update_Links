@@ -78,7 +78,7 @@ def update(df_ext_partner, df_new, df_delete):
     df_remove_from_delete = df_same_permalink[
         ["document","external_id_x"]
     ].rename(columns={"external_id_x": "external_id"})
-    df_edit = df_same_permalink[["document","external_id_y"]]
+    df_edit = df_same_permalink[["document","external_id_y","title"]]
     df_edit = df_edit.rename(
         columns={
             "external_id_y": "external_id"

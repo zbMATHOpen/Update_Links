@@ -167,17 +167,13 @@ def separate_links(partner, df_ext_partner, df_scrape):
     df_exists = pd.merge(df_ext_partner, df_scrape,
                          on=["document", "external_id"],
                          how="inner")
-
     df_exists["title_doc_ext_ids"] = df_exists[
         ["document", "external_id"]
-    ].apply(lambda x: source_helpers.get_titles(x, partner))
+    ].apply(lambda x: source_helpers.get_titles(x, partner), axis=1)
     df_exists = df_exists[df_exists["title_doc_ext_ids"] != df_exists["title"]]
 
     # if title is different add patch
-    df_exists = pd.concat(
-        [df_exists, df_ext_partner, df_ext_partner]
-    ).drop_duplicates(subset=["document", "external_id"], keep=False)
-
+    df_exists = df_exists[["document", "external_id", "title"]]
     df_edit = pd.concat([df_edit, df_exists])
 
     df_new = pd.concat(

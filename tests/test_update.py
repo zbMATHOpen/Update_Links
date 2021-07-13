@@ -1,10 +1,13 @@
 
-from fixtures import sample_ext_id_data, sample_scrape_data
+from unittest.mock import patch
+from fixtures import sample_ext_id_data, sample_scrape_data, mock_get_titles
 
 from update_zblinks_api.update_with_api import separate_links
 
 
-def test_separation():
+@patch('update_zblinks_api.helpers.source_helpers.get_titles',
+       side_effect=mock_get_titles)
+def test_separation(patch):
     df_scrape = sample_scrape_data()
     df_ext_partner = sample_ext_id_data()
     partner = "DLMF"
@@ -29,12 +32,11 @@ def test_title_change_on_edit():
     partner = "DLMF"
 
     df_scrape.loc[
-        df_scrape["document"] == 1234, "title"
+        df_scrape["document"] == 4567, "title"
     ] = "newly scraped title"
 
     df_new, df_edit, df_delete = separate_links(
         partner, df_ext_partner, df_scrape
     )
 
-    assert False
-
+    assert 4567 in df_edit["document"].to_list()
