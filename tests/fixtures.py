@@ -16,5 +16,6 @@ def sample_scrape_data():
     return pd.DataFrame(data)
 
 
-def mock_get_titles(link_data, partner):
-    return "None"
+def mock_get_titles(df_link, partner):
+    df_link["title_doc_ext_ids"] = "None"
+    return df_link

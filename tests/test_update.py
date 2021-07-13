@@ -26,7 +26,9 @@ def test_separation(patch):
     assert "ghij" in df_delete["external_id"].to_list()
 
 
-def test_title_change_on_edit():
+@patch('update_zblinks_api.helpers.source_helpers.get_titles',
+       side_effect=mock_get_titles)
+def test_title_change_on_edit(patch):
     df_scrape = sample_scrape_data()
     df_ext_partner = sample_ext_id_data()
     partner = "DLMF"
