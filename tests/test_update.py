@@ -3,6 +3,7 @@ from unittest.mock import patch
 from fixtures import sample_ext_id_data, sample_scrape_data, mock_get_titles
 
 from update_zblinks_api.update_with_api import separate_links
+from update_zblinks_api.helpers.source_helpers import get_titles
 
 
 @patch('update_zblinks_api.helpers.source_helpers.get_titles',
@@ -42,3 +43,10 @@ def test_title_change_on_edit(patch):
     )
 
     assert 4567 in df_edit["document"].to_list()
+
+
+def test_get_titles():
+    df_scrape = sample_scrape_data()
+    df_scrape = df_scrape[["document","external_id"]]
+    df_res = get_titles(df_scrape,"DLMF")
+    assert len(df_res.index) == 0

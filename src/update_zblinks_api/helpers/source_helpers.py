@@ -28,12 +28,12 @@ def get_titles(df_link, this_partner):
     query_request = """
     SELECT id, title
     FROM zb_links.source
-    WHERE partner = :partner_arg;
+    WHERE partner = %(partner_arg)s
     """
 
     df_source = pd.read_sql_query(query_request,
                                   connection,
-                                  partner_arg=this_partner)
+                                  params={"partner_arg": this_partner})
     connection.close()
 
     df_merge = pd.merge(df_link, df_source,

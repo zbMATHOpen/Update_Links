@@ -21,6 +21,9 @@ def get_permalinks(ext_id):
     if len(ext_id_parts) == 1:
         return ext_id
 
+    if "about/bio/" in ext_id:
+        return ext_id_parts[0]
+
     prefix = ext_id_parts[0]
     suffix = ext_id_parts[1]
     suffix_first_dot_split = suffix.split(".", 2)
