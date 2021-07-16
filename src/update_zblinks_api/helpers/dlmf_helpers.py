@@ -26,8 +26,20 @@ def get_permalinks(ext_id):
 
     prefix = ext_id_parts[0]
     suffix = ext_id_parts[1]
-    suffix_first_dot_split = suffix.split(".", 2)
-    return prefix + "#" + suffix_first_dot_split[0]
+    if suffix.lower().startswith("p"):
+        return prefix
+
+    suffix_remove_two_dots = suffix.rsplit(".", 2)
+    suffix_remove_two_dots = suffix_remove_two_dots[0]
+    # remove possible Itemized sections
+    suffix_remove_another = suffix_remove_two_dots.rsplit(".", 1)
+    if len(suffix_remove_another) == 1:
+        return prefix + "#" + suffix_remove_two_dots
+
+    if suffix_remove_another[1].startswith("I"):
+        return prefix + "#" + suffix_remove_another[0]
+
+    return prefix + "#" + suffix_remove_two_dots
 
 
 def update(df_ext_partner, df_new, df_delete):
@@ -81,9 +93,12 @@ def update(df_ext_partner, df_new, df_delete):
     df_remove_from_delete = df_same_permalink[
         ["document","external_id_x"]
     ].rename(columns={"external_id_x": "external_id"})
-    df_edit = df_same_permalink[["document","external_id_y","title"]]
+    df_edit = df_same_permalink[
+        ["document", "external_id_x", "external_id_y","title"]
+    ]
     df_edit = df_edit.rename(
         columns={
+            "external_id_x": "previous_ext_id",
             "external_id_y": "external_id"
         }
     )

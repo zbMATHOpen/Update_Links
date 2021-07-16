@@ -4,9 +4,18 @@ import os
 import pandas as pd
 import psycopg2
 
+import importlib
+
 from update_zblinks_api import params_dict, partners, link_url
 from update_zblinks_api.helpers import dlmf_helpers, source_helpers
-from update_zblinks_api.dlmf_scraping import scrape_dlmf
+
+
+scrape_dict = {}
+for partner in partners:
+    partner = partner.lower()
+    mod_name = f"update_zblinks_api.{partner}_scraping.scrape_{partner}"
+    imported_module = importlib.import_module(mod_name)
+    scrape_dict[partner] = getattr(imported_module, f"get_df_{partner}_current")
 
 
 def get_doc_ext_id_links():
@@ -144,7 +153,9 @@ def separate_links(partner, df_ext_partner, df_scrape):
         those entries from df_ext_partner which are to be deleted.
 
     """
-    df_edit = pd.DataFrame(columns=(["document", "external_id", "title"]))
+    df_edit = pd.DataFrame(
+        columns=(["document", "external_id", "title", "previous_ext_id"])
+    )
 
     # those links in df_scrape which are not in the matrix
     df_new = pd.concat(
@@ -170,11 +181,12 @@ def separate_links(partner, df_ext_partner, df_scrape):
     df_exists_titles = source_helpers.get_titles(df_exists, partner)
 
     df_new_titles = df_exists_titles[
-        df_exists["title_doc_ext_ids"] != df_exists["title"]
+        df_exists_titles["title_doc_ext_ids"] != df_exists_titles["title"]
     ]
 
     # if title is different add patch
     df_new_titles = df_new_titles[["document", "external_id", "title"]]
+    df_new_titles["previous_ext_id"] = df_new_titles["external_id"]
     df_edit = pd.concat([df_edit, df_new_titles])
 
     df_new = pd.concat(
@@ -200,9 +212,7 @@ def scrape(partner):
         has columns: document, external_id, title.
 
     """
-    # TODO: needs to be implemented
-    # scrape the desired partner and return a DataFrame with the current info
-    df_scrape = scrape_dlmf.get_df_dlmf_2021()
+    df_scrape = scrape_dict[partner.lower()]()
     return df_scrape
 
 
@@ -235,9 +245,9 @@ def update(file):
         )
 
         if file:
-            df_new.to_csv("new_links.csv", index=False)
-            df_edit.to_csv("to_edit.csv", index=False)
-            df_delete.to_csv("delete_links.csv", index=False)
+            df_new.to_csv("results/new_links.csv", index=False)
+            df_edit.to_csv("results/to_edit.csv", index=False)
+            df_delete.to_csv("results/delete_links.csv", index=False)
         else:
             for _, row in df_new:
                 post_request(row, partner)

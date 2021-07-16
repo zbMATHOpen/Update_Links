@@ -9,7 +9,7 @@ def get_titles(df_link, this_partner):
     Parameters
     ----------
     df_link : pandas DataFrame
-        contains 'document', 'external_id' as columns.
+        contains 'document', 'external_id, 'title' as columns.
     partner : string
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
@@ -41,7 +41,15 @@ def get_titles(df_link, this_partner):
                         right_on="id",
                         how="inner"
                         )
+    df_link_title = df_merge[["document","external_id","title_x","title_y"]]
+    df_link_title = df_link_title.rename(
+        columns=(
+            {
+                "title_x":"title",
+                "title_y":"title_doc_ext_ids"
+            }
+        )
+    )
 
-    df_link_title = df_merge[["document","external_id","title"]]
 
     return df_link_title

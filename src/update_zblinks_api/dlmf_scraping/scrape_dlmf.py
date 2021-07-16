@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# Code to scrape the 2021 DLMF bibliography and create a Pandas dataframe
+# Code to scrape the current DLMF bibliography and create a Pandas dataframe
 # ------------------------------------------------------------------------------
 
 import pandas as pd
@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from typing import List
 import requests
 import string
+
+from update_zblinks_api.helpers.zbmath_helpers import get_des_from_zbl_ids
 
 
 def process_dl(a_dl):
@@ -55,7 +57,7 @@ def get_dataframe(zipped_list: List):
     return df
 
 
-def get_df_dlmf_2021():
+def get_df_dlmf_current():
     external_id = []
     title = []
     zbl_code = []
@@ -76,4 +78,6 @@ def get_df_dlmf_2021():
     zipped_list = list(zip(*together_list))
 
     df = get_dataframe(zipped_list=zipped_list)
+    df = get_des_from_zbl_ids(df)
+
     return df

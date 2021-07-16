@@ -1,6 +1,9 @@
 import configparser
 
 
+# tuple of all partners for zblinks API
+partners = ("DLMF",)
+
 config = configparser.ConfigParser()
 config.read('config.ini')
 username = config['DB']['username']
@@ -14,9 +17,6 @@ params_dict = {
     "user"      : username,
     "password"  : password
 }
-
-# tuple of all partners for zblinks API
-partners = ("DLMF")
 
 # url for link requests
 link_url = config['zblinks']['link_url']
