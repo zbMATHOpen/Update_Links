@@ -6,7 +6,7 @@ import psycopg2
 
 import importlib
 
-from update_zblinks_api import params_dict, partners, link_url
+from update_zblinks_api import arg_names, params_dict, partners, link_url
 from update_zblinks_api.helpers import dlmf_helpers, source_helpers
 
 
@@ -64,9 +64,9 @@ def post_request(input_data, partner):
 
     """
 
-    dict_input = {"DE number": input_data[0],
-                  "external id": input_data[1],
-                  "partner": partner,
+    dict_input = {arg_names["document"]: input_data[0],
+                  arg_names["link_ext_id"]: input_data[1],
+                  arg_names["link_partner"]: partner,
                   "title": input_data[3]}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
@@ -79,7 +79,7 @@ def update_request(input_data, partner):
     Parameters
     ----------
     input_data : pandas row
-        contains: [document_id, external_id, title (possibly null)].
+        contains: [document_id, previous_ext_id, external_id, title (possibly null)].
     partner : string
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
@@ -90,9 +90,10 @@ def update_request(input_data, partner):
 
     """
 
-    dict_input = {"DE number": input_data[0],
-                  "external id": input_data[1],
-                  "partner": partner,
+    dict_input = {arg_names["document"]: input_data[0],
+                  arg_names["link_ext_id"]: input_data[1],
+                  arg_names["link_partner"]: partner,
+                  arg_names["edit_link_ext_id"]: input_data[2],
                   "title": input_data[3]}
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
@@ -117,9 +118,9 @@ def delete_request(input_data, partner):
 
     """
 
-    dict_input = {"DE number": input_data[0],
-                  "external id": input_data[1],
-                  "partner": partner}
+    dict_input = {arg_names["document"]: input_data[0],
+                  arg_names["link_ext_id"]: input_data[1],
+                  arg_names["link_partner"]: partner}
 
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 

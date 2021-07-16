@@ -20,3 +20,10 @@ params_dict = {
 
 # url for link requests
 link_url = config['zblinks']['link_url']
+
+arg_names = {
+    "document": "DE number",
+    "link_ext_id": "external id",
+    "link_partner": "partner",
+    "edit_link_ext_id": "new_external_id"
+}
