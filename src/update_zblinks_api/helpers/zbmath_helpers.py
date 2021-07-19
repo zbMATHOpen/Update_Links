@@ -21,7 +21,7 @@ def get_des_from_zbl_ids(df_scrape):
 
     """
 
-    zbl_id_list = tuple(df_scrape["zbl_code"].to_list())
+    zbl_id_tuple = tuple(df_scrape["zbl_code"].to_list())
 
     connection = psycopg2.connect(**params_dict)
 
@@ -33,7 +33,7 @@ def get_des_from_zbl_ids(df_scrape):
 
     df_des = pd.read_sql_query(query_request,
                                connection,
-                               params={"id_list": zbl_id_list})
+                               params={"id_list": zbl_id_tuple})
     connection.close()
 
     df_merge = pd.merge(df_scrape, df_des,

@@ -53,3 +53,37 @@ def get_titles(df_link, this_partner):
 
 
     return df_link_title
+
+
+def remove_lonely_sources(this_partner):
+    connection = psycopg2.connect(**params_dict)
+
+    query_request = """
+    SELECT src.id
+    FROM zb_links.source AS src
+    LEFT OUTER JOIN document_external_ids
+    	ON src.id = document_external_ids.external_id
+        AND src.partner = document_external_ids.type
+    WHERE partner = %(partner_arg)s
+    AND document_external_ids.external_id IS NULL
+    """
+
+    df_lonely_source = pd.read_sql_query(query_request,
+                                         connection,
+                                         params={"partner_arg": this_partner})
+
+    lonely_id_tuple = tuple(df_lonely_source["id"].to_list())
+
+    delete_request = """
+        DELETE FROM zb_links.source
+        WHERE id IN %(id_list)s
+        AND partner = %(partner_arg)s
+    """
+
+    data = {"id_list": lonely_id_tuple, "partner_arg": "DLMF"}
+
+    with connection.cursor() as cursor:
+        cursor.execute(delete_request, data)
+        connection.commit()
+
+    connection.close()

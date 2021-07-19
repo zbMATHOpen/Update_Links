@@ -3,6 +3,7 @@ import requests
 import os
 import pandas as pd
 import psycopg2
+from urllib.parse import urlencode
 
 import importlib
 
@@ -68,9 +69,11 @@ def post_request(input_data, partner):
                   arg_names["link_ext_id"]: input_data[1],
                   arg_names["link_partner"]: partner,
                   "title": input_data[3]}
+    dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    requests.post(link_url, json=dict_input, headers=headers)
+    post_url = link_url + '/?'+ urlencode(dict_input)
+    requests.post(post_url, headers=headers)
 
 
 def update_request(input_data, partner):
@@ -98,7 +101,8 @@ def update_request(input_data, partner):
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    requests.patch(link_url, json=dict_input, headers=headers)
+    update_url = link_url + '/?'+ urlencode(dict_input)
+    requests.patch(update_url, headers=headers)
 
 
 def delete_request(input_data, partner):
@@ -121,10 +125,10 @@ def delete_request(input_data, partner):
     dict_input = {arg_names["document"]: input_data[0],
                   arg_names["link_ext_id"]: input_data[1],
                   arg_names["link_partner"]: partner}
-
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    requests.delete(link_url, json=dict_input, headers=headers)
+    delete_url = link_url + '/?'+ urlencode(dict_input)
+    requests.delete(delete_url, headers=headers)
 
 
 def separate_links(partner, df_ext_partner, df_scrape):
@@ -250,11 +254,17 @@ def update(file):
             df_edit.to_csv("results/to_edit.csv", index=False)
             df_delete.to_csv("results/delete_links.csv", index=False)
         else:
-            for _, row in df_new:
+            df_new = df_new.fillna('')
+            df_edit = df_edit.fillna('')
+            df_delete = df_delete.fillna('')
+
+            for _, row in df_new.iterrows():
                 post_request(row, partner)
 
-            for _, row in df_edit:
+            for _, row in df_edit.iterrows():
                 update_request(row, partner)
 
-            for _, row in df_delete:
+            for _, row in df_delete.iterrows():
                 delete_request(row, partner)
+
+            source_helpers.remove_lonely_sources(partner)
