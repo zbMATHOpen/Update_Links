@@ -56,6 +56,16 @@ def get_titles(df_link, this_partner):
 
 
 def remove_lonely_sources(this_partner):
+    """
+    Removes entries from zb_links.source table
+    which no longer correspond to any link entry
+
+    Parameters
+    ----------
+    this_partner : str
+        name of zbMATH partner.
+
+    """
     connection = psycopg2.connect(**params_dict)
 
     query_request = """
