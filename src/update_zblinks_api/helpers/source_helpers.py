@@ -84,16 +84,17 @@ def remove_lonely_sources(this_partner):
 
     lonely_id_tuple = tuple(df_lonely_source["id"].to_list())
 
-    delete_request = """
-        DELETE FROM zb_links.source
-        WHERE id IN %(id_list)s
-        AND partner = %(partner_arg)s
-    """
+    if len(lonely_id_tuple) > 0:
+        delete_request = """
+            DELETE FROM zb_links.source
+            WHERE id IN %(id_list)s
+            AND partner = %(partner_arg)s
+        """
 
-    data = {"id_list": lonely_id_tuple, "partner_arg": "DLMF"}
+        data = {"id_list": lonely_id_tuple, "partner_arg": "DLMF"}
 
-    with connection.cursor() as cursor:
-        cursor.execute(delete_request, data)
-        connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute(delete_request, data)
+            connection.commit()
 
     connection.close()
