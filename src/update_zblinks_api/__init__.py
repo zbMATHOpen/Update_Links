@@ -11,6 +11,8 @@ password = config['DB']['password']
 host = config['DB']['host']
 db = config['DB']['database']
 
+api_key = config['keys']['API-KEY']
+
 params_dict = {
     "host"      : host,
     "database"  : db,

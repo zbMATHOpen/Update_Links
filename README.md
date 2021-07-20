@@ -1,4 +1,4 @@
-# DLMF scraping
+# Parnter scraping
 
 1) Install requirements and set the env variables.
 
@@ -9,7 +9,7 @@
     pip install .
     ```
 
-    This will install the package (dlmf_scraping) in the virtual environment.
+    This will install the package (update-zblinks-api) in the virtual environment.
 
     Note: to install the package outside the virtual environment,
     deactivate your virtual environment,
@@ -21,32 +21,45 @@
     pip install -e .
     ```
 
-2) Entry points:
+2) Fill in the config_template.ini and save as config.ini
+    i) the url should be the endpoint for link items, e.g.
+    http://my_host/links_api/link/item
 
-   To scrape the current 2021 DLMF and generate the csv file:
-    
-      ```
-    dlmf-csv-2021
+    ii) fill in database information
+
+    iii) the API-Key is the one used by the zbmath_links_api
+
+
+3) Entry points:
+
+    To scrape all partners and modify the database
+
     ```
-   
-   To scrape the old DLMFs (2008-2020) and generate the csv files:
-    
-      ```
-    dlmf-csv-older
+    update-api
     ```
-   
-   To generate the final csv files with dates:
-    
-      ```
-    dlmf-csv-final
+
+    To generate csv files (but not update the database) which can be used to
+    manually update the database:
     ```
-    
-    The csv file has three columns:
-    
-    column 1: zbl_id (that is math_documents.zbl_id)
-    
-    column 2: external_id (that is zb_links.source.id and document_external_ids.external_id)
-    
-    column 3: title (that is zb_links.source.title)
-   
-    column 4: created_at (that is document_external_ids.created_at)
+    update-api --file
+    ```
+    This creates three csv files:
+    new_links.csv
+    to_edit.csv
+    delete.csv
+
+    with the obvious contents, contained in the update_zblinks_api/results
+    folder
+
+
+4) Adding other partners, updating code:
+
+    IMPORTANT: the call for the scraping functions depend on the naming of
+    the folders, and files.
+
+    scraping modules should be named according to the convention
+    update_zblinks_api.{partner}_scraping.scrape_{partner}
+
+    and the funtion in the scrape_{partner} module should be named
+    get_df_{partner}_current
+
