@@ -87,20 +87,31 @@ def update(df_ext_partner, df_new, df_delete):
         how="inner"
     )
 
-    df_same_permalink = df_same_permalink[
-        df_same_permalink["external_id_x"].isin(df_delete["external_id"])
-    ].drop_duplicates(subset=["document","external_id_x"],keep='first')
+    df_same_permalink = pd.merge(df_same_permalink, df_delete,
+                                 left_on=["document", "external_id_x"],
+                                 right_on=["document", "external_id"],
+                                 how="inner")
+    df_same_permalink = df_same_permalink.drop_duplicates(
+        subset=["document","external_id_x"],keep='first'
+    )
+
+    df_same_permalink = df_same_permalink.drop_duplicates(
+        subset=["document","external_id_y"],keep='first'
+    )
+    # note this could mix up the order of the link changes
+    # but in the end all the new links are included
 
     df_remove_from_delete = df_same_permalink[
         ["document","external_id_x"]
     ].rename(columns={"external_id_x": "external_id"})
     df_edit = df_same_permalink[
-        ["document", "external_id_x", "external_id_y","title"]
+        ["document", "external_id_x", "external_id_y","title_x"]
     ]
     df_edit = df_edit.rename(
         columns={
             "external_id_x": "previous_ext_id",
-            "external_id_y": "external_id"
+            "external_id_y": "external_id",
+            "title_x": "title"
         }
     )
 

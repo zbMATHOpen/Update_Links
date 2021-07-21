@@ -1,16 +1,14 @@
 
 import pandas as pd
 
-from unittest.mock import patch
-from fixtures import sample_ext_id_data, sample_scrape_data, mock_get_titles
+import pytest
+from fixtures import sample_ext_id_data, sample_scrape_data
 
 from update_zblinks_api.update_with_api import separate_links
 from update_zblinks_api.helpers.source_helpers import get_titles
 
 
-@patch('update_zblinks_api.helpers.source_helpers.get_titles',
-       side_effect=mock_get_titles)
-def test_separation(patch):
+def test_separation():
     df_scrape = sample_scrape_data()
     df_ext_partner = sample_ext_id_data()
     partner = "DLMF"
@@ -29,9 +27,7 @@ def test_separation(patch):
     assert "ghij" in df_delete["external_id"].to_list()
 
 
-@patch('update_zblinks_api.helpers.source_helpers.get_titles',
-       side_effect=mock_get_titles)
-def test_title_change_on_edit(patch):
+def test_title_change_on_edit():
     df_scrape = sample_scrape_data()
     df_ext_partner = sample_ext_id_data()
     partner = "DLMF"
@@ -47,15 +43,14 @@ def test_title_change_on_edit(patch):
     assert 4567 in df_edit["document"].to_list()
 
 
+@pytest.mark.skip(reason='uses get_title fcn without patch')
 def test_get_titles():
     df_scrape = sample_scrape_data()
     df_res = get_titles(df_scrape,"DLMF")
     assert len(df_res.index) == 0
 
 
-@patch('update_zblinks_api.helpers.source_helpers.get_titles',
-       side_effect=mock_get_titles)
-def test_two_in_same_permalink_one_changed(patch):
+def test_two_in_same_permalink_one_changed():
     df_scrape = sample_scrape_data()
     df_ext_partner = sample_ext_id_data()
     partner = "DLMF"
@@ -74,9 +69,7 @@ def test_two_in_same_permalink_one_changed(patch):
     assert 1235 not in df_edit["document"].to_list()
 
 
-@patch('update_zblinks_api.helpers.source_helpers.get_titles',
-       side_effect=mock_get_titles)
-def test_two_added_in_same_permalink_one_exits(patch):
+def test_two_added_in_same_permalink_one_exits():
     df_scrape = sample_scrape_data()
     df_ext_partner = sample_ext_id_data()
     partner = "DLMF"
@@ -93,3 +86,34 @@ def test_two_added_in_same_permalink_one_exits(patch):
 
     assert 1234 in df_new["document"].to_list()
     assert 1234 in df_edit["document"].to_list()
+
+
+def test_two_links_with_same_permalink_one_changed():
+    df_scrape = sample_scrape_data()
+    df_ext_partner = sample_ext_id_data()
+    partner = "DLMF"
+
+    data = {"document": [4567]*2,
+            "external_id" :["abcd#i.p4", "abcd#i.p7"],
+            "type": ["DLMF"]*2}
+    df_same_ext_id_doc =  pd.DataFrame(data)
+    df_ext_partner = pd.concat([df_ext_partner, df_same_ext_id_doc])
+
+    data_scrape = {"document": [4567]*2,
+                   "external_id" :["abcd#i.p4", "abcd#i.p8"],
+                   "type": ["DLMF"]*2}
+    df_change_scrape = pd.DataFrame(data_scrape)
+    df_scrape = pd.concat([df_scrape, df_change_scrape])
+    df_scrape.loc[
+        df_scrape["document"] == 4567, "title"
+    ] = "None"
+
+    df_new, df_edit, df_delete = separate_links(
+        partner, df_ext_partner, df_scrape
+    )
+
+    df_edit_doc = df_edit.loc[
+        df_edit["document"] == 4567, "previous_ext_id"
+    ]
+
+    assert "abcd#i.p4" not in df_edit_doc.to_list()
