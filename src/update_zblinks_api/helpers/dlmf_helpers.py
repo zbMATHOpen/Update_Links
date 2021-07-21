@@ -89,7 +89,8 @@ def update(df_ext_partner, df_new, df_delete):
 
     df_same_permalink = df_same_permalink[
         df_same_permalink["external_id_x"].isin(df_delete["external_id"])
-    ]
+    ].drop_duplicates(subset=["document","external_id_x"],keep='first')
+
     df_remove_from_delete = df_same_permalink[
         ["document","external_id_x"]
     ].rename(columns={"external_id_x": "external_id"})

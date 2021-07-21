@@ -72,3 +72,24 @@ def test_two_in_same_permalink_one_changed(patch):
 
     assert 1235 in df_new["document"].to_list()
     assert 1235 not in df_edit["document"].to_list()
+
+
+@patch('update_zblinks_api.helpers.source_helpers.get_titles',
+       side_effect=mock_get_titles)
+def test_two_added_in_same_permalink_one_exits(patch):
+    df_scrape = sample_scrape_data()
+    df_ext_partner = sample_ext_id_data()
+    partner = "DLMF"
+
+    data = {"document": [1234],
+            "external_id" :["abcd#i.p6"],
+            "type": ["DLMF"]}
+    df_same_perma_same_doc =  pd.DataFrame(data)
+    df_scrape = pd.concat([df_scrape, df_same_perma_same_doc])
+
+    df_new, df_edit, df_delete = separate_links(
+        partner, df_ext_partner, df_scrape
+    )
+
+    assert 1234 in df_new["document"].to_list()
+    assert 1234 in df_edit["document"].to_list()
