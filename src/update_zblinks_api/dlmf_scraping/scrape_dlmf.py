@@ -44,7 +44,11 @@ def scrape_page(letter, external_id: List, title: List, zbl_code: List):
                                 zbl_code.append(should_process_tuple[1])
                                 title_tag = a_tag_ltx_ref_class["title"]
                                 if "About" in title_tag:
-                                    title.append(title_tag[:-20])
+                                    split_title = title_tag.split("\xe2\x80\xa3")
+                                    title_current = split_title[0].strip()
+                                    if split_title == "Preface":
+                                        title_current = title_tag
+                                    title.append(title_current)
                                 else:
                                     title.append(title_tag)
 
