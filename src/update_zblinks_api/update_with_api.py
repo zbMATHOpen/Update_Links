@@ -21,6 +21,8 @@ for partner in partners:
 
 def get_doc_ext_id_links():
     """
+    reads from the document_external_ids table relevant
+    link partner data
 
     Returns
     -------
@@ -50,6 +52,7 @@ def get_doc_ext_id_links():
 
 def post_request(input_data, partner):
     """
+    submits a link post request to the linksApi.
 
     Parameters
     ----------
@@ -58,10 +61,6 @@ def post_request(input_data, partner):
     partner : string
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
-
-    Posts
-    -------
-    submits a link post request to the linksApi.
 
     """
 
@@ -78,6 +77,7 @@ def post_request(input_data, partner):
 
 def update_request(input_data, partner):
     """
+    submits a link patch request to the linksApi.
 
     Parameters
     ----------
@@ -86,10 +86,6 @@ def update_request(input_data, partner):
     partner : string
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
-
-    Patches
-    -------
-    submits a link patch request to the linksApi.
 
     """
 
@@ -107,6 +103,7 @@ def update_request(input_data, partner):
 
 def delete_request(input_data, partner):
     """
+    submits a link delete request to the linksApi.
 
     Parameters
     ----------
@@ -115,10 +112,6 @@ def delete_request(input_data, partner):
     partner : string
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
-
-    Patches
-    -------
-    submits a link delete request to the linksApi.
 
     """
 
@@ -133,6 +126,7 @@ def delete_request(input_data, partner):
 
 def separate_links(partner, df_ext_partner, df_scrape):
     """
+    determines which links should be added, resp. deleted, resp. edited
 
     Parameters
     ----------
@@ -203,6 +197,7 @@ def separate_links(partner, df_ext_partner, df_scrape):
 
 def scrape(partner):
     """
+    calls the web scraping code to scrape the links partner
 
     Parameters
     ----------
@@ -230,9 +225,6 @@ def scrape(partner):
 )
 def update(file):
     """
-
-    Runs
-    -------
     takes the ouput from separate_links() and applies, respectively,
     post, patch, and delete requests.
 

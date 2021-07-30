@@ -4,6 +4,9 @@ import pandas as pd
 
 def get_permalinks(ext_id):
     """
+    gets the permalink under which an external_id is located;
+    the permalink is custom defined (overlaps in most cases with
+    the DLMF defined permalinks)
 
     Parameters
     ----------
@@ -44,6 +47,9 @@ def get_permalinks(ext_id):
 
 def update(df_ext_partner, df_new, df_delete):
     """
+    determines links which are to be grouped as to be added, edited, or
+    deleted; specific to DLMF: a link will not be edited if the only
+    change is a change in location, but under the same permalink.
 
     Parameters
     ----------

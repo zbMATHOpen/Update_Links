@@ -5,6 +5,7 @@ from update_zblinks_api import params_dict
 
 def get_titles(df_link, this_partner):
     """
+    gets the title from the zb_links.source table associated with a link source
 
     Parameters
     ----------
