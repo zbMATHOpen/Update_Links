@@ -3,6 +3,7 @@ import pytest
 from unittest import mock
 from fixtures import mock_get_titles
 
+
 @pytest.fixture(autouse=True)
 def get_titles():
 

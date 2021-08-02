@@ -2,15 +2,13 @@
 import pandas as pd
 
 import pytest
-from fixtures import sample_ext_id_data, sample_scrape_data
+from fixtures import df_ext_partner, df_scrape
 
 from update_zblinks_api.update_with_api import separate_links
 from update_zblinks_api.helpers.source_helpers import get_titles
 
 
-def test_separation():
-    df_scrape = sample_scrape_data()
-    df_ext_partner = sample_ext_id_data()
+def test_separation(df_ext_partner, df_scrape):
     partner = "DLMF"
 
     df_new, df_edit, df_delete = separate_links(
@@ -27,9 +25,7 @@ def test_separation():
     assert "ghij" in df_delete["external_id"].to_list()
 
 
-def test_title_change_on_edit():
-    df_scrape = sample_scrape_data()
-    df_ext_partner = sample_ext_id_data()
+def test_title_change_on_edit(df_ext_partner, df_scrape):
     partner = "DLMF"
 
     df_scrape.loc[
@@ -44,15 +40,12 @@ def test_title_change_on_edit():
 
 
 @pytest.mark.skip(reason='uses get_title fcn without patch')
-def test_get_titles():
-    df_scrape = sample_scrape_data()
+def test_get_titles(df_scrape):
     df_res = get_titles(df_scrape,"DLMF")
     assert len(df_res.index) == 0
 
 
-def test_two_in_same_permalink_one_changed():
-    df_scrape = sample_scrape_data()
-    df_ext_partner = sample_ext_id_data()
+def test_two_in_same_permalink_one_changed(df_ext_partner, df_scrape):
     partner = "DLMF"
 
     data = {"document": [1235],
@@ -69,9 +62,7 @@ def test_two_in_same_permalink_one_changed():
     assert 1235 not in df_edit["document"].to_list()
 
 
-def test_two_added_in_same_permalink_one_exits():
-    df_scrape = sample_scrape_data()
-    df_ext_partner = sample_ext_id_data()
+def test_two_added_in_same_permalink_one_exits(df_ext_partner, df_scrape):
     partner = "DLMF"
 
     data = {"document": [1234],
@@ -88,9 +79,7 @@ def test_two_added_in_same_permalink_one_exits():
     assert 1234 in df_edit["document"].to_list()
 
 
-def test_two_links_with_same_permalink_one_changed():
-    df_scrape = sample_scrape_data()
-    df_ext_partner = sample_ext_id_data()
+def test_two_links_with_same_permalink_one_changed(df_ext_partner, df_scrape):
     partner = "DLMF"
 
     data = {"document": [4567]*2,
