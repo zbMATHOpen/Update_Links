@@ -5,13 +5,14 @@ import configparser
 partners = ("DLMF",)
 
 config = configparser.ConfigParser()
-config.read('config.ini')
-username = config['DB']['username']
-password = config['DB']['password']
-host = config['DB']['host']
-db = config['DB']['database']
+config.read("config.ini")
+print(config)
+username = config["DB"]["username"]
+password = config["DB"]["password"]
+host = config["DB"]["host"]
+db = config["DB"]["database"]
 
-api_key = config['keys']['API-KEY']
+api_key = config["keys"]["API-KEY"]
 
 params_dict = {
     "host"      : host,
@@ -21,7 +22,7 @@ params_dict = {
 }
 
 # url for link requests
-link_url = config['zblinks']['link_url']
+link_url = config["zblinks"]["link_url"]
 
 arg_names = {
     "document": "DE number",

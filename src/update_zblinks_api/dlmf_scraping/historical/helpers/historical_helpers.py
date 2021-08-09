@@ -41,7 +41,7 @@ def process_dl_2020(a_dl):
 # Functions to scrape
 # ------------------------------------------------------------------------------
 
-def scrape_page_2008_2010(year, letter, external_id: List, zbl_code: List):
+def scrape_page_2008_2010(year, letter, external_id: List, document: List):
     if letter == "A":
         letter = ""
     if year == 2008:
@@ -76,14 +76,14 @@ def scrape_page_2008_2010(year, letter, external_id: List, zbl_code: List):
                 for a_tag_cited_class in a_tag_list:
                     if (len(a_tag_cited_class["class"]) == 1
                             and "dlmf.nist.gov" in a_tag_cited_class["href"]):
-                        zbl_code.append(should_process_tuple[1])
+                        document.append(should_process_tuple[1])
                         external_id.append(a_tag_cited_class["href"].split(
                             "dlmf.nist.gov"
                         )[1][1:]
                                            )
 
 
-def scrape_page_2011_2012(year, letter, external_id: List, zbl_code: List):
+def scrape_page_2011_2012(year, letter, external_id: List, document: List):
     if letter == "A":
         letter = ""
     if year == 2011:
@@ -114,14 +114,14 @@ def scrape_page_2011_2012(year, letter, external_id: List, zbl_code: List):
                 for a_tag_cited_class in a_tag_list:
 
                     if "dlmf.nist.gov" in a_tag_cited_class["href"]:
-                        zbl_code.append(should_process_tuple[1])
+                        document.append(should_process_tuple[1])
                         external_id.append(a_tag_cited_class["href"].split(
                             "dlmf.nist.gov"
                         )[1][1:]
                                            )
 
 
-def scrape_page_2013_2019(year, letter, external_id: List, zbl_code: List):
+def scrape_page_2013_2019(year, letter, external_id: List, document: List):
     if letter == "A":
         letter = ""
     if year == 2013:
@@ -173,14 +173,14 @@ def scrape_page_2013_2019(year, letter, external_id: List, zbl_code: List):
                 for a_tag_cited_class in a_tag_list:
 
                     if "dlmf.nist.gov" in a_tag_cited_class["href"]:
-                        zbl_code.append(should_process_tuple[1])
+                        document.append(should_process_tuple[1])
                         external_id.append(a_tag_cited_class["href"].split(
                             "dlmf.nist.gov"
                         )[1][1:]
                                            )
 
 
-def scrape_page_2020(letter, external_id: List, zbl_code: List):
+def scrape_page_2020(letter, external_id: List, document: List):
     if letter == "A":
         letter = ""
     source = requests.get("https://web.archive.org/web/20201230110228/https:"
@@ -200,7 +200,7 @@ def scrape_page_2020(letter, external_id: List, zbl_code: List):
                 for a_tag_cited_class in a_tag_list:
 
                     if "dlmf.nist.gov" in a_tag_cited_class["href"]:
-                        zbl_code.append(should_process_tuple[1])
+                        document.append(should_process_tuple[1])
                         external_id.append(a_tag_cited_class["href"].split(
                             "dlmf.nist.gov"
                         )[1][1:]
@@ -213,6 +213,6 @@ def scrape_page_2020(letter, external_id: List, zbl_code: List):
 def get_dataframe(zipped_list: List):
     df = pd.DataFrame.from_records(
         data=zipped_list,
-        columns=["zbl_code", "external_id"]
+        columns=["document", "external_id"]
     )
     return df
