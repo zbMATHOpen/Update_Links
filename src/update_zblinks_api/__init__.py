@@ -6,7 +6,6 @@ partners = ("DLMF",)
 
 config = configparser.ConfigParser()
 config.read("config.ini")
-print(config)
 username = config["DB"]["username"]
 password = config["DB"]["password"]
 host = config["DB"]["host"]
