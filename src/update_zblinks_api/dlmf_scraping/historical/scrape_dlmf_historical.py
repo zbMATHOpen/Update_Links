@@ -13,7 +13,7 @@ def get_df_dlmf(year):
 
     upper_list = list(string.ascii_uppercase)
     for each_letter in upper_list:
-        if year == 2008 or year == 2009 or year == 2010:
+        if year >= 2008 and year <= 2010:
             historical_helpers.scrape_page_2008_2010(
                 year=year,
                 letter=each_letter,
@@ -27,8 +27,7 @@ def get_df_dlmf(year):
                 external_id=external_id,
                 document=document
             )
-        if year == 2013 or year == 2014 or year == 2015 \
-                or year == 2016 or year == 2017 or year == 2018 or year == 2019:
+        if year >= 2013 and year <= 2019:
             historical_helpers.scrape_page_2013_2019(
                 year=year,
                 letter=each_letter,

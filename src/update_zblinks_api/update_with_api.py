@@ -192,6 +192,8 @@ def separate_links(partner, df_ext_partner, df_scrape):
         [df_new, df_new_titles, df_new_titles]
     ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
+    df_new = df_new[["document","external_id","title"]]
+
     return df_new, df_edit, df_delete
 
 
