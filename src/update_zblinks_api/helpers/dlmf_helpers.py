@@ -98,11 +98,11 @@ def update(df_ext_partner, df_new, df_delete):
                                  right_on=["document", "external_id"],
                                  how="inner")
     df_same_permalink = df_same_permalink.drop_duplicates(
-        subset=["document","external_id_x"],keep='first'
+        subset=["document","external_id_x"],keep="first"
     )
 
     df_same_permalink = df_same_permalink.drop_duplicates(
-        subset=["document","external_id_y"],keep='first'
+        subset=["document","external_id_y"],keep="first"
     )
     # note this could mix up the order of the link changes
     # but in the end all the new links are included

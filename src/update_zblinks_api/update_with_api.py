@@ -41,7 +41,7 @@ def get_doc_ext_id_links():
 
     file_columns = ["document", "external_id", "type"]
     df_ext_id = pd.DataFrame(SQL_QUERY, columns=file_columns)
-    df_ext_id = df_ext_id.fillna('')
+    df_ext_id = df_ext_id.fillna("")
 
     # filter out only entries for zblinks
     df_zblinks_ext_id = df_ext_id[df_ext_id["type"].isin(partners)]
@@ -70,7 +70,7 @@ def post_request(input_data, partner):
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    post_url = link_url + '/?' + urlencode(dict_input)
+    post_url = link_url + "/?" + urlencode(dict_input)
     requests.post(post_url, headers=headers)
 
 
@@ -98,7 +98,7 @@ def update_request(input_data, partner):
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    update_url = link_url + '/?' + urlencode(dict_input)
+    update_url = link_url + "/?" + urlencode(dict_input)
     requests.patch(update_url, headers=headers)
 
 
@@ -121,7 +121,7 @@ def delete_request(input_data, partner):
                   arg_names["link_partner"]: partner}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    delete_url = link_url + '/?' + urlencode(dict_input)
+    delete_url = link_url + "/?" + urlencode(dict_input)
     requests.delete(delete_url, headers=headers)
 
 
@@ -249,9 +249,9 @@ def update(file):
             df_edit.to_csv("results/to_edit.csv", index=False)
             df_delete.to_csv("results/delete_links.csv", index=False)
         else:
-            df_new = df_new.fillna('')
-            df_edit = df_edit.fillna('')
-            df_delete = df_delete.fillna('')
+            df_new = df_new.fillna("")
+            df_edit = df_edit.fillna("")
+            df_delete = df_delete.fillna("")
 
             for _, row in df_new.iterrows():
                 post_request(row, partner)

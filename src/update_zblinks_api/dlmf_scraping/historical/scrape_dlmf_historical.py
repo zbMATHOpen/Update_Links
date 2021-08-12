@@ -3,7 +3,8 @@
 # ------------------------------------------------------------------------------
 
 import string
-from helpers import historical_helpers
+from update_zblinks_api.dlmf_scraping.historical.helpers import \
+    historical_helpers
 
 
 def get_df_dlmf(year):

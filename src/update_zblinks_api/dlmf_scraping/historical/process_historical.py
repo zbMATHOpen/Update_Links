@@ -1,12 +1,12 @@
 import pandas as pd
 from update_zblinks_api.update_with_api import separate_links
-import scrape_dlmf_historical
+from update_zblinks_api.dlmf_scraping.historical import scrape_dlmf_historical
 
 
 def csv_dlmf_initial():
     df_main = pd.DataFrame(
         columns=(["document", "external_id", "date", "title"]))
-    for year in range(2008, 2010):
+    for year in range(2008, 2021):
         df_scrape = scrape_dlmf_historical.get_df_dlmf(year)
         df_new, df_edit, df_delete = separate_links("DLMF", df_main, df_scrape)
         df_new["date"] = year
@@ -33,9 +33,7 @@ def csv_dlmf_initial():
         )
         df_main = df_main[["document", "external_id", "date", "title"]]
 
-    initial_dlmf = df_main.to_csv(f"initial_dlmf.csv", index=False)
+    initial_dlmf = df_main.to_csv("initial_dlmf.csv", index=False)
 
     return initial_dlmf
 
-if __name__ == "__main__":
-   csv_dlmf_initial()

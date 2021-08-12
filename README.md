@@ -1,4 +1,4 @@
-# Parnter scraping
+# Partner scraping
 
 1) Install requirements and set the env variables.
 
@@ -28,10 +28,10 @@
 
     (ii) Fill in database information.
 
-    (iii) The API-Key is the one used by the zbmath_links_api.
+    (iii) The API-KEY is the one used by the zbmath_links_api.
 
 
-3) Entry points:
+3) Available entry points:
 
     (i) To scrape all partners and modify the database
 
@@ -47,7 +47,7 @@
     This creates three csv files: new_links.csv, to_edit.csv, delete.csv with the obvious contents, contained in the update_zblinks_api/results
     folder.
     
-     (iii) To generate the initial csv file corresponding to DLMF
+     (iii) To generate the initial csv file (initial_dlmf.csv) with DLMF data:
 
     ```
     csv-dlmf-initial
