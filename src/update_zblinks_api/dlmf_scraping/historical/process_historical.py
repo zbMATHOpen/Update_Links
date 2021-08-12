@@ -33,7 +33,8 @@ def csv_dlmf_initial():
         )
         df_main = df_main[["document", "external_id", "date", "title"]]
 
-    initial_dlmf = df_main.to_csv("initial_dlmf.csv", index=False)
+        df_main = pd.concat(
+            [df_main, df_delete, df_delete]
+        ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
-    return initial_dlmf
-
+    df_main.to_csv("initial_dlmf.csv", index=False)
