@@ -1,8 +1,8 @@
-
 import pandas as pd
 from bs4 import BeautifulSoup
 from typing import List
 import requests
+
 
 # ------------------------------------------------------------------------------
 # Functions to select paragraphs
@@ -36,6 +36,7 @@ def process_dl_2020(a_dl):
             if a_tag:
                 return True, a_tag["href"].split("zbmath.org/")[1]
     return False, ""
+
 
 # ------------------------------------------------------------------------------
 # Functions to scrape

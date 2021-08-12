@@ -10,7 +10,6 @@ import importlib
 from update_zblinks_api import arg_names, params_dict, partners, link_url
 from update_zblinks_api.helpers import dlmf_helpers, source_helpers
 
-
 scrape_dict = {}
 for partner in partners:
     partner = partner.lower()
@@ -71,7 +70,7 @@ def post_request(input_data, partner):
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    post_url = link_url + '/?'+ urlencode(dict_input)
+    post_url = link_url + '/?' + urlencode(dict_input)
     requests.post(post_url, headers=headers)
 
 
@@ -82,7 +81,9 @@ def update_request(input_data, partner):
     Parameters
     ----------
     input_data : pandas row
-        contains: [document_id, previous_ext_id, external_id, title (possibly null)].
+        contains: [
+        document_id, previous_ext_id, external_id, title (possibly null)
+        ].
     partner : string
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
@@ -97,7 +98,7 @@ def update_request(input_data, partner):
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    update_url = link_url + '/?'+ urlencode(dict_input)
+    update_url = link_url + '/?' + urlencode(dict_input)
     requests.patch(update_url, headers=headers)
 
 
@@ -120,7 +121,7 @@ def delete_request(input_data, partner):
                   arg_names["link_partner"]: partner}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
-    delete_url = link_url + '/?'+ urlencode(dict_input)
+    delete_url = link_url + '/?' + urlencode(dict_input)
     requests.delete(delete_url, headers=headers)
 
 
@@ -158,14 +159,14 @@ def separate_links(partner, df_ext_partner, df_scrape):
 
     # those links in df_scrape which are not in the matrix
     df_new = pd.concat(
-        [df_scrape,df_ext_partner,df_ext_partner]
-    ).drop_duplicates(subset=["document","external_id"], keep=False)
+        [df_scrape, df_ext_partner, df_ext_partner]
+    ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
     # those links in the matrix which are not
     # in df_scrape, and are not one of the links to update
     df_delete = pd.concat(
         [df_ext_partner, df_scrape, df_scrape]
-    ).drop_duplicates(subset=["document","external_id"], keep=False)
+    ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
     # to update:
     if partner == "DLMF":
@@ -181,7 +182,7 @@ def separate_links(partner, df_ext_partner, df_scrape):
 
     df_new_titles = df_exists_titles[
         df_exists_titles["title_doc_ext_ids"] != df_exists_titles["title"]
-    ]
+        ]
 
     # if title is different add patch
     df_new_titles = df_new_titles[["document", "external_id", "title"]]
@@ -192,7 +193,7 @@ def separate_links(partner, df_ext_partner, df_scrape):
         [df_new, df_new_titles, df_new_titles]
     ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
-    df_new = df_new[["document","external_id","title"]]
+    df_new = df_new[["document", "external_id", "title"]]
 
     return df_new, df_edit, df_delete
 

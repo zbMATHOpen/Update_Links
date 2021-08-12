@@ -2,7 +2,6 @@
 # Code to scrape the 2008-2020 DLMF bibliography and create a Pandas dataframe
 # ------------------------------------------------------------------------------
 
-import pandas as pd
 import string
 from helpers import historical_helpers
 
