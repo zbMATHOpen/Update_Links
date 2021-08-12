@@ -3,10 +3,10 @@ from update_zblinks_api.update_with_api import separate_links
 import scrape_dlmf_historical
 
 
-def csv_all_historical():
+def csv_dlmf_initial():
     df_main = pd.DataFrame(
         columns=(["document", "external_id", "date", "title"]))
-    for year in range (2008, 2012):
+    for year in range (2020, 2022):
         df_scrape = scrape_dlmf_historical.get_df_dlmf(year)
         df_new, df_edit, df_delete = separate_links("DLMF", df_main, df_scrape)
         df_new["date"] = year
@@ -22,19 +22,19 @@ def csv_all_historical():
             columns={"external_id_y": "external_id",
                      "title_y": "title"}
         )
-        df_changes = df_changes[["document", "external_id", "date",
-                                  "title","previous_ext_id"]]
+        df_changes = df_changes[
+            ["document", "external_id", "date", "title","previous_ext_id"]
+        ]
 
         df_main["previous_ext_id"] = df_main["external_id"]
         df_main = pd.concat([df_main, df_changes]).drop_duplicates(
-            subset=["document","previous_ext_id"], keep="last")
+            subset=["document","previous_ext_id"],
+            keep="last"
+        )
         df_main = df_main[["document", "external_id", "date", "title"]]
 
-    # result_csv = df_main.to_csv(f"dlmf_result.csv", index = False)
-    # edit_csv = df_edit.to_csv(f"dlmf_edit.csv", index=False)
-    # changes_csv = df_changes.to_csv(f"dlmf_changes.csv", index=False)
-
+    main_csv = df_main.to_csv(f"initial_dlmf.csv", index = False)
 
 
 if __name__ == "__main__":
-    csv_all_historical()
+    csv_dlmf_initial()
