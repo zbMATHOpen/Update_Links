@@ -219,43 +219,8 @@ def scrape_page_2020(
                         title.append(None)
 
 
-def scrape_page_2021(
-        letter, external_id: List, title: List, document: List
-):
-    if letter == "A":
-        letter = ""
-    source = requests.get("https://dlmf.nist.gov/bib" + "/" + letter)
-    html_text = source.text
-    soup = BeautifulSoup(html_text, features="html.parser")
-    dls = soup.find_all("dl")
-    for a_dl in dls:
-        should_process_tuple = process_dl_2020(a_dl)
-        if should_process_tuple[0]:
-            dds = a_dl.find_all("dd")
-            for a_dd in dds:
-                a_tag_list = a_dd.find_all("a", {"class": "ltx_ref"})
-                for a_tag_ltx_ref_class in a_tag_list:
-                    if a_tag_ltx_ref_class and \
-                            len(a_tag_ltx_ref_class["class"]) == 1:
-                        if a_tag_ltx_ref_class["href"][0] == ".":
-                            a_reference = a_tag_ltx_ref_class["href"][5:]
-                            if not "bib" in a_reference:
-                                external_id.append(a_reference)
-                                document.append(should_process_tuple[1])
-                                title_tag = a_tag_ltx_ref_class["title"]
-                                if "About" in title_tag:
-                                    split_title = title_tag.split(
-                                        "\xe2\x80\xa3"
-                                    )
-                                    title_current = split_title[0].strip()
-                                    if split_title == "Preface":
-                                        title_current = title_tag
-                                    title.append(title_current)
-                                else:
-                                    title.append(title_tag)
-
 # ------------------------------------------------------------------------------
-# Create the dataframe with 3 columns
+# Create the dataframe with 3 columns. Title is blank
 # ------------------------------------------------------------------------------
 
 def get_dataframe(zipped_list: List):

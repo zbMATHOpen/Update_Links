@@ -12,7 +12,7 @@
     This will install the package (update-zblinks-api) in the virtual environment.
 
     Note: to install the package outside the virtual environment,
-    deactivate your virtual environment,
+    deactivate your virtual environment:
     ```
     deactivate
     ```
@@ -21,35 +21,38 @@
     pip install -e .
     ```
 
-2) Fill in the config_template.ini and save as config.ini
-    i) the url should be the endpoint for link items, e.g.
+2) Fill in the config_template.ini and save as config.ini.
+
+    (i) The url should be the endpoint for link items, e.g.,
     http://my_host/links_api/link/item
 
-    ii) fill in database information
+    (ii) Fill in database information.
 
-    iii) the API-Key is the one used by the zbmath_links_api
+    (iii) The API-Key is the one used by the zbmath_links_api.
 
 
 3) Entry points:
 
-    To scrape all partners and modify the database
+    (i) To scrape all partners and modify the database
 
     ```
     update-api
     ```
 
-    To generate csv files (but not update the database) which can be used to
+    (ii) To generate csv files (but not update the database) which can be used to
     manually update the database:
     ```
     update-api --file
     ```
-    This creates three csv files:
-    new_links.csv
-    to_edit.csv
-    delete.csv
+    This creates three csv files: new_links.csv, to_edit.csv, delete.csv with the obvious contents, contained in the update_zblinks_api/results
+    folder.
+    
+     (iii) To generate the initial csv file corresponding to DLMF
 
-    with the obvious contents, contained in the update_zblinks_api/results
-    folder
+    ```
+    csv-dlmf-initial
+    ```
+    
 
 
 4) Adding other partners, updating code:

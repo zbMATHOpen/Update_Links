@@ -45,13 +45,6 @@ def get_df_dlmf(year):
                 title=title,
                 document=document
             )
-        if year == 2021:
-            historical_helpers.scrape_page_2021(
-                letter=each_letter,
-                external_id=external_id,
-                title=title,
-                document=document
-            )
 
     together_list = []
     together_list.append(document)
