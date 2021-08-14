@@ -66,7 +66,7 @@ def post_request(input_data, partner):
     dict_input = {arg_names["document"]: input_data[0],
                   arg_names["link_ext_id"]: input_data[1],
                   arg_names["link_partner"]: partner,
-                  "title": input_data[3]}
+                  "title": input_data[2]}
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
 
