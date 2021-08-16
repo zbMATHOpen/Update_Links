@@ -12,7 +12,7 @@ def get_des_from_zbl_ids(df_scrape):
     ----------
     df_scrape : DataFrame
         represents the dataframe from a partner scrape
-        has "zbl_code" as a columns.
+        has "zbl_code" as a column.
 
     Returns
     -------
@@ -41,9 +41,8 @@ def get_des_from_zbl_ids(df_scrape):
                         right_on="zbl_id",
                         how="inner")
 
-    df_scrape_with_de = df_merge[["id","external_id","title"]]
-    df_scrape_with_de = df_scrape_with_de.rename(
-        columns=({"id":"document"})
-    )
+    df_merge = df_merge.drop(columns=["zbl_id"])
+
+    df_scrape_with_de = df_merge.rename(columns=({"id":"document"}))
 
     return df_scrape_with_de

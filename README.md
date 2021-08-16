@@ -44,15 +44,20 @@
     ```
     update-api --file
     ```
-    This creates three csv files: new_links.csv, to_edit.csv, delete.csv with the obvious contents, contained in the update_zblinks_api/results
-    folder.
-    
-     (iii) To generate the initial csv file (initial_dlmf.csv) with DLMF data:
+    This creates three csv files: new_links.csv, to_edit.csv, delete.csv with the obvious contents,
+    contained in the update_zblinks_api/results folder.
+
+    (iii) To generate the initial csv files for matrix tables (document_external_ids
+    and zb_links.source) for a particular partner:
 
     ```
-    csv-dlmf-initial
+    csv-initial -p <partner>
     ```
-    
+    This creates two csv files:
+    {partner}_deids_table_init.csv, {partner}_source_table_init.csv
+    contained in the update_zblinks_api/results folder.
+
+
 
 
 4) Adding other partners, updating code:
@@ -65,4 +70,11 @@
 
     and the funtion in the scrape_{partner} module should be named
     get_df_{partner}_current
+
+    similarly for any historical scraping (for instance to get initial database
+    datasets) the modules should be named according to
+    update_zblinks_api.{partner}_scraping.historical.scrape_{partner}_historical
+
+    and the funtion in the scrape_{partner}_historical module should be named
+    get_df_{partner}_initial
 

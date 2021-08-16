@@ -2,9 +2,12 @@
 # Code to scrape the 2008-2020 DLMF bibliography and create a Pandas dataframe
 # ------------------------------------------------------------------------------
 
+import pandas as pd
 import string
+
 from update_zblinks_api.dlmf_scraping.historical.helpers import \
     historical_helpers
+from update_zblinks_api.update_with_api import separate_links
 
 
 def get_df_dlmf(year):
@@ -54,3 +57,87 @@ def get_df_dlmf(year):
 
     df = historical_helpers.get_dataframe(zipped_list=zipped_list)
     return df
+
+
+def create_source_table_dataset(df_hist):
+    """
+    Creates a csv file which can inserted into the zb_links.sources table.
+    Has columns "id", "id_scheme", "type", "url", "title", "partner"
+
+    Parameters
+    ----------
+    df_hist : dataframe
+        dataframe holding the initial scraping of a.
+        has columns: "document", "external_id", "date", "title"
+
+    """
+
+    df_hist = df_hist.drop(columns=["document", "date"])
+    df_hist = df_hist.rename(columns={"external_id": "id"})
+
+    df_hist["url"] = "https://dlmf.nist.gov/" + df_hist["id"]
+    df_hist["partner"] = "DLMF"
+
+    df_hist["id_scheme"] = "DLMF scheme"
+    df_hist["type"] = "DLMF bibliographic entry"
+
+    df_hist = df_hist.drop_duplicates()
+
+    column_order = ["id", "id_scheme", "type", "url", "title", "partner"]
+    df_hist = df_hist.reindex(columns=column_order)
+
+    df_hist.to_csv("results/DLMF_source_table_init.csv", index=False)
+
+
+def get_df_dlmf_initial():
+    """
+    scrapes the DLMF website (via wayback machine) for the years
+    2008-2020
+
+    Returns
+    -------
+    df_main : dataframe
+        contains link information: zbl_code, external_id (id on DLMF site) pairs,
+        date (year in which the link was first found), and title
+        (of section in which link appears; to be used in source table).
+
+    """
+    df_main = pd.DataFrame(
+        columns=(["document", "external_id", "date", "title"]))
+    for year in range(2008, 2021):
+        df_scrape = get_df_dlmf(year)
+        df_new, df_edit, df_delete = separate_links("DLMF", df_main, df_scrape)
+        df_new["date"] = year
+        df_main = pd.concat([df_main, df_new]).drop_duplicates(keep=False)
+
+        df_changes = pd.merge(df_main, df_edit,
+                              left_on=["document", "external_id"],
+                              right_on=["document", "previous_ext_id"],
+                              how="inner")
+        df_changes = df_changes.fillna("")
+        df_changes = df_changes.drop(columns=["external_id_x", "title_x"])
+        df_changes = df_changes.rename(
+            columns={"external_id_y": "external_id",
+                     "title_y": "title"}
+        )
+        df_changes = df_changes[
+            ["document", "external_id", "date", "title", "previous_ext_id"]
+        ]
+
+        df_main["previous_ext_id"] = df_main["external_id"]
+        df_main = pd.concat([df_main, df_changes]).drop_duplicates(
+            subset=["document", "previous_ext_id"],
+            keep="last"
+        )
+        df_main = df_main[["document", "external_id", "date", "title"]]
+
+        df_main = pd.concat(
+            [df_main, df_delete, df_delete]
+        ).drop_duplicates(subset=["document", "external_id"], keep=False)
+
+    create_source_table_dataset(df_main)
+
+    df_main = df_main.rename(columns={"document": "zbl_code"})
+
+    return df_main
+

@@ -83,5 +83,6 @@ def get_df_dlmf_current():
 
     df = get_dataframe(zipped_list=zipped_list)
     df = get_des_from_zbl_ids(df)
+    df = df[["document","external_id","title"]]
 
     return df
