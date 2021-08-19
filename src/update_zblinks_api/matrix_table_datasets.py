@@ -1,4 +1,3 @@
-
 import click
 import pandas as pd
 from pkg_resources import get_distribution
@@ -11,14 +10,16 @@ from update_zblinks_api.helpers.zbmath_helpers import get_des_from_zbl_ids
 hist_scrape_dict = {}
 for partner in partners:
     partner = partner.lower()
-    mod_name = f"update_zblinks_api.{partner}_scraping.historical.scrape_{partner}_historical"
+    mod_name = f"update_zblinks_api.{partner}_scraping." \
+               f"historical.scrape_{partner}_historical"
     imported_module = importlib.import_module(mod_name)
-    hist_scrape_dict[partner] = getattr(imported_module, f"get_df_{partner}_initial")
+    hist_scrape_dict[partner] = getattr(imported_module,
+                                        f"get_df_{partner}_initial")
 
 
 def create_deids_table_dataset(partner, df_hist):
     """
-    Creates a csv file which can inserted into the document_external_ids table.
+    Creates a csv file which can be inserted into the document_external_ids table.
     Has columns "document", "external_id", "type", "matched_at", "matched_by",
     "matched_by_version"
 
@@ -38,7 +39,9 @@ def create_deids_table_dataset(partner, df_hist):
 
     df_hist["matched_at"] = pd.to_datetime(df_hist["matched_at"], format="%Y")
     df_hist["matched_at"] = (
-        df_hist["matched_at"].dt.tz_localize("CET").dt.tz_convert("Europe/Berlin")
+        df_hist["matched_at"].dt.tz_localize("CET").dt.tz_convert(
+            "Europe/Berlin"
+        )
     )
 
     dist = get_distribution("update-zblinks-api")
@@ -56,10 +59,10 @@ def create_deids_table_dataset(partner, df_hist):
 
 
 @click.command()
-@click.option('--partner','-p',
-    help="partner from which the initial datasets are to come",
-    required=True
-)
+@click.option('--partner', '-p',
+              help="partner from which the initial datasets are to come",
+              required=True
+              )
 def create_matrix_table_datasets(partner):
     """
     creates the initial csv files for matrix table insertions
