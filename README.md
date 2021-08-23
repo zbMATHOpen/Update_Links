@@ -1,80 +1,82 @@
-# Partner scraping
+## Update package for the zbMATH Links API
 
-1) Install requirements and set the env variables.
+The purpose of this package is to populate and update the database used by another package produced at [zbMATH](https://zbmath.org/), namely the zbMATH Links API `zbmath-link-api`, available [here](https://github.com/zbMATHOpen/linksApi). The usage of the present package is mainly described in the README file of the `zbmath-link-api` package.
 
-    On a first install:
+Here we provide some simple instructions to install and use this package.
+
+1) Install the requirements and set the environment variables.
+On a first install:
+
     ```
     python3 -m venv env
     source env/bin/activate
     pip install .
     ```
 
-    This will install the package (update-zblinks-api) in the virtual environment.
-
-    Note: to install the package outside the virtual environment,
-    deactivate your virtual environment:
+    This will install the package, `update-zblinks-api`, in the virtual environment. 
+    Note: to install the package as a package outside the virtual environment, deactivate your virtual environment:
+    
     ```
     deactivate
     ```
+    
     Navigate to root folder, and
+    
     ```
     pip install -e .
     ```
 
-2) Fill in the config_template.ini and save as config.ini.
+2) Fill in the `config_template.ini` and save it as `config.ini`.
 
     (i) The url should be the endpoint for link items, e.g.,
     http://my_host/links_api/link/item
 
     (ii) Fill in database information.
 
-    (iii) The API-KEY is the one used by the zbmath_links_api.
+    (iii) The API-KEY is the one used by the API package `zbmath-link-api`.
 
 
-3) Available entry points:
+3) The package has two entry points:
 
-    (i) To scrape all partners and modify the database
+    (i) To scrape (i.e., to obtain all links) all zbMATH partners and update the database used by the package `zbmath-link-api` use the command
 
     ```
     update-api
     ```
+    
+    This will automatically add new links, delete links that no longer exist and edit links that have been modified. 
+    
+    **Remark 1.** The present version of the package works with the [Digital Library of Mathematical Functions](https://dlmf.nist.gov/) (DLMF) as zbMATH partner. 
+    Therefore, one can use the command
+    
+    ```
+    update-api -p DLMF
+    ```
+    
+    to update the DLMF dataset managed by  `zbmath-link-api`.
+    In the next future some scraping scripts for other partners will be integrated into this package and the command
+    
+    ```
+    update-api
+    ```
+    
+    will do an automatic update of all links managed by `zbmath-link-api` for all partners.
 
-    (ii) To generate csv files (but not update the database) which can be used to
-    manually update the database:
+    **Remark 2.** To generate csv files (but not update the database) which can be used to manually update the database use the command
+    
     ```
     update-api --file
     ```
-    This creates three csv files: new_links.csv, to_edit.csv, delete.csv with the obvious contents,
-    contained in the update_zblinks_api/results folder.
+    
+    This creates three csv files: `new_links.csv`, `to_edit.csv`, `delete.csv` with the obvious contents, contained in the `update_zblinks_api/results` folder.
 
-    (iii) To generate the initial csv files for matrix tables (document_external_ids
-    and zb_links.source) for a particular partner:
+    (ii) Use the command
 
-    ```
-    csv-initial -p <partner>
-    ```
-    This creates two csv files:
-    {partner}_deids_table_init.csv, {partner}_source_table_init.csv
-    contained in the update_zblinks_api/results folder.
+   ```
+   csv-initial -p DLMF
+   ```
+   
+   to create two csv files with real DLMF data up to the year 2020: `DLMF_deids_table_init.csv` (to be inserted into the table `document_external_ids`) and   `DLMF_source_table_init.csv` (to be inserted into the table `source`). 
+   These files are contained in the `update_zblinks_api/results` folder.
 
-
-
-
-4) Adding other partners, updating code:
-
-    IMPORTANT: the call for the scraping functions depend on the naming of
-    the folders, and files.
-
-    scraping modules should be named according to the convention
-    update_zblinks_api.{partner}_scraping.scrape_{partner}
-
-    and the funtion in the scrape_{partner} module should be named
-    get_df_{partner}_current
-
-    similarly for any historical scraping (for instance to get initial database
-    datasets) the modules should be named according to
-    update_zblinks_api.{partner}_scraping.historical.scrape_{partner}_historical
-
-    and the funtion in the scrape_{partner}_historical module should be named
-    get_df_{partner}_initial
 

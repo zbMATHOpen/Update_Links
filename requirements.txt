@@ -1,6 +1,0 @@
-
-click
-requests
-bs4
-pandas
-psycopg2
