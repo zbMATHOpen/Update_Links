@@ -223,7 +223,7 @@ def scrape(partner):
 @click.option(
     "--file", is_flag=True,
     help="Use this option to write the data to csv files"
-         " instead of writing to the matrix"
+         "instead of writing to the matrix"
          "new_links.csv, to_edit.csv, delete_links.csv will be created"
 )
 def update(file):
@@ -245,9 +245,9 @@ def update(file):
         )
 
         if file:
-            df_new.to_csv("results/new_links.csv", index=False)
-            df_edit.to_csv("results/to_edit.csv", index=False)
-            df_delete.to_csv("results/delete_links.csv", index=False)
+            df_new.to_csv(f"results/{partner}_new_links.csv", index=False)
+            df_edit.to_csv(f"results/{partner}_to_edit.csv", index=False)
+            df_delete.to_csv(f"results/{partner}_delete_links.csv", index=False)
         else:
             df_new = df_new.fillna("")
             df_edit = df_edit.fillna("")
@@ -263,3 +263,44 @@ def update(file):
                 delete_request(row, partner)
 
             source_helpers.remove_lonely_sources(partner)
+
+
+def use_files_to_update(partner):
+    """
+    Used to insert the data from the csv files:
+    new_links.csv, to_edit.csv, delete_links.csv
+    into the database
+    These files need to be located in the results folder.
+
+    Parameters
+    ----------
+    partner : str
+        zblinks API partner
+
+
+    """
+    for partner in partners:
+        insert_file = f"results/{partner}_new_links.csv"
+        try:
+            df_insert = pd.read_csv(insert_file)
+            df_insert = df_insert.fillna("")
+            for _, row in df_insert.iterrows():
+                post_request(row, partner)
+        except:
+            pass
+
+        try:
+            edit_file = f"results/{partner}_to_edit.csv"
+            df_edit = pd.read_csv(edit_file)
+            for _, row in df_edit.iterrows():
+                update_request(row, partner)
+        except:
+            pass
+
+        try:
+            delete_file = f"results/{partner}_delete_links.csv"
+            df_delete = pd.read_csv(delete_file)
+            for _, row in df_delete.iterrows():
+                delete_request(row, partner)
+        except:
+            pass
