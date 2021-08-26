@@ -85,5 +85,5 @@ On a first install:
    csv-to-db
    ```
 
-   to use the csv files from the output of update-api --file and export the information from the files to the database
+   to use the csv files from the output of update-api --file and export the information from the files to the database.
 
