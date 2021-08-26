@@ -169,7 +169,7 @@ def separate_links(partner, df_ext_partner, df_scrape):
     ).drop_duplicates(subset=["document", "external_id"], keep=False)
 
     # to update:
-    if partner == "DLMF":
+    if partner == "dlmf":
         df_new, df_edit, df_delete = dlmf_helpers.update(
             df_ext_partner, df_new, df_delete
         )
@@ -265,10 +265,10 @@ def update(file):
             source_helpers.remove_lonely_sources(partner)
 
 
-def use_files_to_update(partner):
+def use_files_to_update():
     """
-    Used to insert the data from the csv files:
-    new_links.csv, to_edit.csv, delete_links.csv
+    For each partner, inserts the data from the csv files:
+    {partner}_new_links.csv, {partner}_to_edit.csv, {partner}_delete_links.csv
     into the database
     These files need to be located in the results folder.
 
@@ -286,21 +286,21 @@ def use_files_to_update(partner):
             df_insert = df_insert.fillna("")
             for _, row in df_insert.iterrows():
                 post_request(row, partner)
-        except:
-            pass
+        except FileNotFoundError:
+            click.echo(f"Error: could not find {insert_file}.")
 
         try:
             edit_file = f"results/{partner}_to_edit.csv"
             df_edit = pd.read_csv(edit_file)
             for _, row in df_edit.iterrows():
                 update_request(row, partner)
-        except:
-            pass
+        except FileNotFoundError:
+            click.echo(f"Error: could not find {edit_file}.")
 
         try:
             delete_file = f"results/{partner}_delete_links.csv"
             df_delete = pd.read_csv(delete_file)
             for _, row in df_delete.iterrows():
                 delete_request(row, partner)
-        except:
-            pass
+        except FileNotFoundError:
+            click.echo(f"Error: could not find {delete_file}.")

@@ -81,7 +81,7 @@ def create_source_table_dataset(df_hist):
     df_hist["id_scheme"] = "DLMF scheme"
     df_hist["type"] = "DLMF bibliographic entry"
 
-    df_hist = df_hist.drop_duplicates()
+    df_hist = df_hist.drop_duplicates(subset=["id"])
 
     column_order = ["id", "id_scheme", "type", "url", "title", "partner"]
     df_hist = df_hist.reindex(columns=column_order)
