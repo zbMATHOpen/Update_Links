@@ -1,6 +1,7 @@
 ## Update package for the zbMATH Links API
 
-The purpose of this package is to populate and update the database used by another package produced at [zbMATH](https://zbmath.org/), namely the zbMATH Links API `zbmath-links-api`, available [here](https://github.com/zbMATHOpen/linksApi). The usage of the present package is mainly described in the README file of the `zbmath-links-api` package.
+The purpose of this package is to populate and update the database used by another package produced at [zbMATH](https://zbmath.org/), namely the zbMATH Links API `zbmath-links-api`, available [here](https://github.com/zbMATHOpen/linksApi). 
+The usage of the present package is mainly described in the README file of the `zbmath-links-api` package.
 
 Here we provide some simple instructions to install and use this package.
 
@@ -20,7 +21,7 @@ On a first install:
     deactivate
     ```
     
-    Navigate to root folder, and
+    Navigate to the root folder, and
     
     ```
     pip install -e .
@@ -28,7 +29,7 @@ On a first install:
 
 2) Fill in the `config_template.ini` and save it as `config.ini`.
 
-    (i) The url should be the endpoint for link items, e.g.,
+    (i) The URL should be the endpoint for link items, e.g.,
     http://my_host/links_api/link/item
 
     (ii) Fill in database information.
@@ -44,7 +45,7 @@ On a first install:
     update-api
     ```
     
-    This will automatically add new links, delete links that no longer exist and edit links that have been modified. 
+    This will automatically add new links, delete links that no longer exist, and edit links that have been modified. 
     
     **Remark 1.** The present version of the package works with the [Digital Library of Mathematical Functions](https://dlmf.nist.gov/) (DLMF) as zbMATH partner. 
     Therefore, one can use the command
@@ -53,8 +54,8 @@ On a first install:
     update-api -p DLMF
     ```
     
-    to update the DLMF dataset managed by  `zbmath-links-api`.
-    In the next future some scraping scripts for other partners will be integrated into this package and the command
+    to update the DLMF dataset managed by `zbmath-links-api`.
+    In the next future, some scraping scripts for other partners will be integrated into this package, and the command
     
     ```
     update-api
@@ -62,13 +63,13 @@ On a first install:
     
     will do an automatic update of all links managed by `zbmath-links-api` for all partners.
 
-    **Remark 2.** To generate csv files (but not update the database) which can be used to manually update the database use the command
+    **Remark 2.** To generate CSV files (but not update the database) which can be used to manually update the database use the command
     
     ```
     update-api --file
     ```
     
-    This creates three csv files: `new_links.csv`, `to_edit.csv`, `delete.csv` with the obvious contents, contained in the `update_zblinks_api/results` folder.
+    This creates three CSV files: `new_links.csv`, `to_edit.csv`, `delete.csv` with the obvious contents, contained in the `update_zblinks_api/results` folder.
 
     (ii) Use the command
 
