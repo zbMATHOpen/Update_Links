@@ -11,21 +11,11 @@ On a first install:
     ```
     python3 -m venv env
     source env/bin/activate
-    pip install .
-    ```
-
-    This will install the package, `update-zblinks-api`, in the virtual environment. 
-    Note: to install the package as a package outside the virtual environment, deactivate your virtual environment:
-    
-    ```
-    deactivate
-    ```
-    
-    Navigate to the root folder, and
-    
-    ```
     pip install -e .
     ```
+
+    This will install the package, `update-zblinks-api`, in the [virtual environment](https://docs.python.org/3/tutorial/venv.html). 
+    
 
 2) Fill in the `config_template.ini` and save it as `config.ini`.
 
