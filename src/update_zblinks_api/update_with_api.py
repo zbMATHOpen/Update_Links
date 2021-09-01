@@ -153,6 +153,8 @@ def separate_links(partner, df_ext_partner, df_scrape):
         those entries from df_ext_partner which are to be deleted.
 
     """
+    partner = partner.lower()
+
     df_edit = pd.DataFrame(
         columns=(["document", "external_id", "title", "previous_ext_id"])
     )

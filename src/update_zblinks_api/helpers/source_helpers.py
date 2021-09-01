@@ -29,7 +29,7 @@ def get_titles(df_link, this_partner):
     query_request = """
     SELECT id, title
     FROM zb_links.source
-    WHERE LOWER(partner) = %(partner_arg)s
+    WHERE partner = %(partner_arg)s
     """
 
     df_source = pd.read_sql_query(query_request,
@@ -75,7 +75,7 @@ def remove_lonely_sources(this_partner):
     LEFT OUTER JOIN document_external_ids
     	ON src.id = document_external_ids.external_id
         AND src.partner = document_external_ids.type
-    WHERE LOWER(partner) = %(partner_arg)s
+    WHERE src.parter = %(partner_arg)s
     AND document_external_ids.external_id IS NULL
     """
 
@@ -89,7 +89,7 @@ def remove_lonely_sources(this_partner):
         delete_request = """
             DELETE FROM zb_links.source
             WHERE id IN %(id_list)s
-            AND LOWER(partner) = %(partner_arg)s
+            AND partner = %(partner_arg)s
         """
 
         data = {"id_list": lonely_id_tuple, "partner_arg": this_partner}
