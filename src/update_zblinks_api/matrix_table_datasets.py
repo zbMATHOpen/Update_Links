@@ -1,6 +1,5 @@
 import click
 import pandas as pd
-from pkg_resources import get_distribution
 
 import importlib
 
@@ -44,9 +43,8 @@ def create_deids_table_dataset(partner, df_hist):
         )
     )
 
-    dist = get_distribution("update-zblinks-api")
     df_hist["matched_by"] = "zbmath-links-api"
-    df_hist["matched_by_version"] = dist.version
+    df_hist["matched_by_version"] = "1.0.0"
 
     if "zbl_code" in df_hist.columns:
         df_hist = get_des_from_zbl_ids(df_hist)
