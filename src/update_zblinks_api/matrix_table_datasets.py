@@ -44,7 +44,7 @@ def create_deids_table_dataset(partner, df_hist):
         )
     )
 
-    dist = get_distribution("update-zblinks-api")
+    dist = get_distribution("zbmath-links-api")
     df_hist["matched_by"] = dist.project_name
     df_hist["matched_by_version"] = dist.version
 
