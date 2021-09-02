@@ -75,7 +75,7 @@ def remove_lonely_sources(this_partner):
     LEFT OUTER JOIN document_external_ids
     	ON src.id = document_external_ids.external_id
         AND src.partner = document_external_ids.type
-    WHERE partner = %(partner_arg)s
+    WHERE src.parter = %(partner_arg)s
     AND document_external_ids.external_id IS NULL
     """
 
@@ -92,7 +92,7 @@ def remove_lonely_sources(this_partner):
             AND partner = %(partner_arg)s
         """
 
-        data = {"id_list": lonely_id_tuple, "partner_arg": "DLMF"}
+        data = {"id_list": lonely_id_tuple, "partner_arg": this_partner}
 
         with connection.cursor() as cursor:
             cursor.execute(delete_request, data)

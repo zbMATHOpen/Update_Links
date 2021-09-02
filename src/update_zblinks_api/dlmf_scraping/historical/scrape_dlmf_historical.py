@@ -76,12 +76,12 @@ def create_source_table_dataset(df_hist):
     df_hist = df_hist.rename(columns={"external_id": "id"})
 
     df_hist["url"] = "https://dlmf.nist.gov/" + df_hist["id"]
-    df_hist["partner"] = "DLMF"
+    df_hist["partner"] = "dlmf"
 
     df_hist["id_scheme"] = "DLMF scheme"
     df_hist["type"] = "DLMF bibliographic entry"
 
-    df_hist = df_hist.drop_duplicates()
+    df_hist = df_hist.drop_duplicates(subset=["id"])
 
     column_order = ["id", "id_scheme", "type", "url", "title", "partner"]
     df_hist = df_hist.reindex(columns=column_order)
@@ -106,7 +106,7 @@ def get_df_dlmf_initial():
         columns=(["document", "external_id", "date", "title"]))
     for year in range(2008, 2021):
         df_scrape = get_df_dlmf(year)
-        df_new, df_edit, df_delete = separate_links("DLMF", df_main, df_scrape)
+        df_new, df_edit, df_delete = separate_links("dlmf", df_main, df_scrape)
         df_new["date"] = year
         df_main = pd.concat([df_main, df_new]).drop_duplicates(keep=False)
 

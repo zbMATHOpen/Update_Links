@@ -26,7 +26,7 @@ def create_deids_table_dataset(partner, df_hist):
     Parameters
     ----------
     partner : str
-        partner from which the initial datasets are to come.
+        partner (in lowercase) from which the initial datasets are to come.
     df_hist : dataframe
         contains columns: "document" (or "zbl_code"), "external_id",
         "date" (as int year).
@@ -35,7 +35,7 @@ def create_deids_table_dataset(partner, df_hist):
 
     df_hist = df_hist.rename(columns={"date": "matched_at"})
 
-    df_hist["type"] = partner.lower()
+    df_hist["type"] = partner
 
     df_hist["matched_at"] = pd.to_datetime(df_hist["matched_at"], format="%Y")
     df_hist["matched_at"] = (
@@ -75,8 +75,9 @@ def create_matrix_table_datasets(partner):
         partner from which the initial datasets are to come.
 
     """
+    partner = partner.lower()
 
     # this also creates the initial dataset for the zb_links.source table
-    df_init_partner = hist_scrape_dict[partner.lower()]()
+    df_init_partner = hist_scrape_dict[partner]()
 
     create_deids_table_dataset(partner, df_init_partner)

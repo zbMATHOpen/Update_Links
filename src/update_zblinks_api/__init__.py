@@ -3,6 +3,8 @@ import configparser
 
 # tuple of all partners for zblinks API
 partners = ("DLMF",)
+partners = tuple(p.lower() for p in partners)
+
 
 config = configparser.ConfigParser()
 config.read("config.ini")
