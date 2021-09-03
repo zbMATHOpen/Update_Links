@@ -248,9 +248,9 @@ def update(file):
         )
 
         if file:
-            df_new.to_csv(f"results/{partner}_new_links.csv", index=False)
-            df_edit.to_csv(f"results/{partner}_to_edit.csv", index=False)
-            df_delete.to_csv(f"results/{partner}_delete_links.csv", index=False)
+            df_new.to_csv(f"results/{partner.lower()}_new_links.csv", index=False)
+            df_edit.to_csv(f"results/{partner.lower()}_to_edit.csv", index=False)
+            df_delete.to_csv(f"results/{partner.lower()}_delete_links.csv", index=False)
         else:
             df_new = df_new.fillna("")
             df_edit = df_edit.fillna("")
@@ -283,7 +283,7 @@ def use_files_to_update():
 
     """
     for partner in partners:
-        insert_file = f"results/{partner}_new_links.csv"
+        insert_file = f"results/{partner.lower()}_new_links.csv"
         try:
             df_insert = pd.read_csv(insert_file)
             df_insert = df_insert.fillna("")
@@ -292,7 +292,7 @@ def use_files_to_update():
         except FileNotFoundError:
             click.echo(f"Error: could not find {insert_file}.")
 
-        edit_file = f"results/{partner}_to_edit.csv"
+        edit_file = f"results/{partner.lower()}_to_edit.csv"
         try:
             df_edit = pd.read_csv(edit_file)
             for _, row in df_edit.iterrows():
@@ -300,7 +300,7 @@ def use_files_to_update():
         except FileNotFoundError:
             click.echo(f"Error: could not find {edit_file}.")
 
-        delete_file = f"results/{partner}_delete_links.csv"
+        delete_file = f"results/{partner.lower()}_delete_links.csv"
         try:
             df_delete = pd.read_csv(delete_file)
             for _, row in df_delete.iterrows():
