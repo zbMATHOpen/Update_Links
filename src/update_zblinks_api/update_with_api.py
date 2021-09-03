@@ -291,16 +291,16 @@ def use_files_to_update():
         except FileNotFoundError:
             click.echo(f"Error: could not find {insert_file}.")
 
+        edit_file = f"results/{partner}_to_edit.csv"
         try:
-            edit_file = f"results/{partner}_to_edit.csv"
             df_edit = pd.read_csv(edit_file)
             for _, row in df_edit.iterrows():
                 update_request(row, partner)
         except FileNotFoundError:
             click.echo(f"Error: could not find {edit_file}.")
 
+        delete_file = f"results/{partner}_delete_links.csv"
         try:
-            delete_file = f"results/{partner}_delete_links.csv"
             df_delete = pd.read_csv(delete_file)
             for _, row in df_delete.iterrows():
                 delete_request(row, partner)
