@@ -86,7 +86,7 @@ def create_source_table_dataset(df_hist):
     column_order = ["id", "id_scheme", "type", "url", "title", "partner"]
     df_hist = df_hist.reindex(columns=column_order)
 
-    df_hist.to_csv("results/DLMF_source_table_init.csv", index=False)
+    df_hist.to_csv("results/dlmf_source_table_init.csv", index=False)
 
 
 def get_df_dlmf_initial():

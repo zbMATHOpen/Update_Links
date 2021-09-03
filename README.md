@@ -37,23 +37,7 @@ On a first install:
 
     This will automatically add new links, delete links that no longer exist, and edit links that have been modified.
 
-    **Remark 1.** The present version of the package works with the [Digital Library of Mathematical Functions](https://dlmf.nist.gov/) (DLMF) as zbMATH partner.
-    Therefore, one can use the command
-
-    ```
-    update-api -p DLMF
-    ```
-
-    to update the DLMF dataset managed by `zbmath-links-api`.
-    In the next future, some scraping scripts for other partners will be integrated into this package, and the command
-
-    ```
-    update-api
-    ```
-
-    will do an automatic update of all links managed by `zbmath-links-api` for all partners.
-
-    **Remark 2.** To generate CSV files (but not update the database) which can be used to manually update the database use the command
+    **Remark 1.** To generate CSV files (but not update the database) which can be used to manually update the database use the command
 
     ```
     update-api --file
