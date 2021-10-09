@@ -59,36 +59,6 @@ def get_df_dlmf(year):
     return df
 
 
-def create_source_table_dataset(df_hist):
-    """
-    Creates a csv file which can inserted into the zb_links.sources table.
-    Has columns "id", "id_scheme", "type", "url", "title", "partner"
-
-    Parameters
-    ----------
-    df_hist : dataframe
-        dataframe holding the initial scraping of a.
-        has columns: "document", "external_id", "date", "title"
-
-    """
-
-    df_hist = df_hist.drop(columns=["document", "date"])
-    df_hist = df_hist.rename(columns={"external_id": "id"})
-
-    df_hist["url"] = "https://dlmf.nist.gov/" + df_hist["id"]
-    df_hist["partner"] = "dlmf"
-
-    df_hist["id_scheme"] = "DLMF scheme"
-    df_hist["type"] = "DLMF bibliographic entry"
-
-    df_hist = df_hist.drop_duplicates(subset=["id"])
-
-    column_order = ["id", "id_scheme", "type", "url", "title", "partner"]
-    df_hist = df_hist.reindex(columns=column_order)
-
-    df_hist.to_csv("results/dlmf_source_table_init.csv", index=False)
-
-
 def get_df_dlmf_initial():
     """
     scrapes the DLMF website (via wayback machine) for the years
@@ -107,7 +77,7 @@ def get_df_dlmf_initial():
     for year in range(2008, 2021):
         df_scrape = get_df_dlmf(year)
         df_new, df_edit, df_delete = separate_links("dlmf", df_main, df_scrape)
-        df_new["date"] = year
+        df_new["date"] = str(year)
         df_main = pd.concat([df_main, df_new]).drop_duplicates(keep=False)
 
         df_changes = pd.merge(df_main, df_edit,
@@ -134,8 +104,6 @@ def get_df_dlmf_initial():
         df_main = pd.concat(
             [df_main, df_delete, df_delete]
         ).drop_duplicates(subset=["document", "external_id"], keep=False)
-
-    create_source_table_dataset(df_main)
 
     df_main = df_main.rename(columns={"document": "zbl_code"})
 
