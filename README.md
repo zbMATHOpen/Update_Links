@@ -48,11 +48,14 @@ On a first install:
     (ii) Use the command
 
    ```
-   csv-initial -p <partner>
+   initial-entries -p <partner>
    ```
 
-   to create two csv files with real historical parter data: `{partner}_deids_table_init.csv` (to be inserted into the table `document_external_ids`) and   `{partner}_source_table_init.csv` (to be inserted into the table `source`).
-   These files are contained in the `update_zblinks_api/results` folder.
+   to initialize the database with historical data for the given partner.
+
+   use the option --file
+   to create a csv file with historical parter data: `{partner}_deids_table_init.csv` (to be inserted into the table `document_external_ids`).
+   The file will be created in the `update_zblinks_api/results` folder.
 
    (iii) Use the command
 
