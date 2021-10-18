@@ -14,7 +14,7 @@ On a first install:
     pip install -e .
     ```
 
-    This will install the package, `update-zblinks-api`, in the [virtual environment](https://docs.python.org/3/tutorial/venv.html).
+    This will install the package, `update-zblinks-api` in the [virtual environment](https://docs.python.org/3/tutorial/venv.html).
 
 
 2) Fill in the `config_template.ini` and save it as `config.ini`.
@@ -25,37 +25,38 @@ On a first install:
     (ii) Fill in database information.
 
     (iii) The API-KEY is the one used by the API package `zbmath-links-api`.
+    
+    Now connect the package to the database, e.g., `export DATABASE_URL="postgresql:///my_database"` and `export  ZBMATH_API_KEY=my_key`
 
 
 3) The package has three entry points:
 
-    (i) To scrape (i.e., to obtain all links) all zbMATH partners and update the database used by the package `zbmath-links-api` use the command
-
-    ```
-    update-api
-    ```
-
-    This will automatically add new links, delete links that no longer exist, and edit links that have been modified.
-
-    **Remark 1.** To generate CSV files (but not update the database) which can be used to manually update the database use the command
-
-    ```
-    update-api --file
-    ```
-
-    This creates three CSV files: `{partner}_new_links.csv`, `{partner}_to_edit.csv`, `{partner}_delete.csv` with the obvious contents, contained in the `update_zblinks_api/results` folder.
-
-    (ii) Use the command
+    (i) Use the command
 
    ```
    initial-entries -p <partner>
    ```
 
-   to initialize the database with historical data for the given partner.
+   to initialise the database with historical data for the given partner. 
+   
+   **Remark.** Note that this command will populate the tables `document_external_ids` and `source` with links corresponding to documents that already exist  in the table `math_documents`. 
 
-   use the option --file
-   to create a csv file with historical parter data: `{partner}_deids_table_init.csv` (to be inserted into the table `document_external_ids`).
+   **Remark.**  One can use  the option --file to create a csv file with historical partner data: `{partner}_deids_table_init.csv` (to be inserted into the table `document_external_ids`).
    The file will be created in the `update_zblinks_api/results` folder.
+
+    (ii) Use the command 
+
+    ```
+    update-api
+    ```
+    
+    to scrape (i.e., to obtain all links) all zbMATH partners and update the database used by the package `zbmath-links-api`.
+    This will automatically add new links, delete links that no longer exist, and edit links that have been modified. 
+    This has to be used once the database has been already initialised with the previous command.
+
+    **Remark.** One can use  the option --file to generate csv files (but not update the database) which can be used to manually update the database.
+This creates three csv files: `{partner}_new_links.csv`, `{partner}_to_edit.csv`, `{partner}_delete.csv` with the obvious contents, contained in the `update_zblinks_api/results` folder.
+
 
    (iii) Use the command
 
@@ -63,5 +64,5 @@ On a first install:
    csv-to-db
    ```
 
-   to use the csv files from the output of update-api --file and export the information from the files to the database.
+   to export the csv files from the output of `update-api --file`  to the database.
 
