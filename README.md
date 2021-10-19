@@ -1,7 +1,6 @@
 ## Update package for the zbMATH Links API
 
 The purpose of this package is to populate and update the database used by another package produced at [zbMATH](https://zbmath.org/), namely the zbMATH Links API `zbmath-links-api`, available [here](https://github.com/zbMATHOpen/linksApi).
-The usage of the present package is mainly described in the README file of the `zbmath-links-api` package.
 
 Here we provide some simple instructions to install and use this package.
 
