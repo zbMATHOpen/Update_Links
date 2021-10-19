@@ -29,5 +29,6 @@ arg_names = {
     "document": "DE number",
     "link_ext_id": "external id",
     "link_partner": "partner",
-    "edit_link_ext_id": "new_external_id"
+    "edit_link_ext_id": "new_external_id",
+    "date": "link_publication_date"
 }

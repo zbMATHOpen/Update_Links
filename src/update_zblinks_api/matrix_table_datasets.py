@@ -6,6 +6,7 @@ import importlib
 
 from update_zblinks_api import partners
 from update_zblinks_api.helpers.zbmath_helpers import get_des_from_zbl_ids
+from update_zblinks_api.update_with_api import post_request
 
 hist_scrape_dict = {}
 for partner in partners:
@@ -37,12 +38,9 @@ def create_deids_table_dataset(partner, df_hist):
 
     df_hist["type"] = partner
 
-    df_hist["matched_at"] = pd.to_datetime(df_hist["matched_at"], format="%Y")
-    df_hist["matched_at"] = (
-        df_hist["matched_at"].dt.tz_localize("CET").dt.tz_convert(
-            "Europe/Berlin"
-        )
-    )
+    df_hist["title"] = ""
+
+    df_hist["matched_at"] = df_hist["matched_at"] + "-01-01"
 
     dist = get_distribution("update-zblinks-api")
     df_hist["matched_by"] = "zbmath-links-api"
@@ -51,11 +49,11 @@ def create_deids_table_dataset(partner, df_hist):
     if "zbl_code" in df_hist.columns:
         df_hist = get_des_from_zbl_ids(df_hist)
 
-    column_order = ["document", "external_id", "type", "matched_at",
-                    "matched_by", "matched_by_version"]
+    column_order = ["document", "external_id", "type", "title",
+                    "matched_at", "matched_by", "matched_by_version"]
     df_hist = df_hist.reindex(columns=column_order)
 
-    df_hist.to_csv(f"results/{partner}_deids_table_init.csv", index=False)
+    return df_hist
 
 
 @click.command()
@@ -63,7 +61,12 @@ def create_deids_table_dataset(partner, df_hist):
               help="partner from which the initial datasets are to come",
               required=True
               )
-def create_matrix_table_datasets(partner):
+@click.option(
+    "--file", is_flag=True,
+    help="Use this option to write the data to csv files"
+         "instead of writing to the matrix"
+)
+def matrix_table_entries(partner, file):
     """
     creates the initial csv files for matrix table insertions
     (for the document_external_ids and zb_links.source tables)
@@ -80,4 +83,14 @@ def create_matrix_table_datasets(partner):
     # this also creates the initial dataset for the zb_links.source table
     df_init_partner = hist_scrape_dict[partner]()
 
-    create_deids_table_dataset(partner, df_init_partner)
+    df_hist = create_deids_table_dataset(partner, df_init_partner)
+    if file:
+        df_hist.to_csv(f"results/{partner}_deids_table_init.csv", index=False)
+    else:
+        df_hist = df_hist[
+            ["document", "external_id", "title",
+             "matched_at", "matched_by_version"]
+        ]
+        for _, row in df_hist.iterrows():
+            post_request(row, partner)
+

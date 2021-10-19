@@ -57,17 +57,30 @@ def post_request(input_data, partner):
     Parameters
     ----------
     input_data : pandas row
-        contains: [document_id, external_id, title]
+        contains: [document_id, external_id, title,
+                   matched_at, matched_by_version]
     partner : string
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
 
     """
 
+    date = ""
+    mbv = ""
+    try:
+        date = input_data[3]
+    except IndexError:
+        pass
+    try:
+        mbv = input_data[4]
+    except IndexError:
+        pass
     dict_input = {arg_names["document"]: input_data[0],
                   arg_names["link_ext_id"]: input_data[1],
                   arg_names["link_partner"]: partner,
-                  "title": input_data[2]}
+                  "title": input_data[2],
+                  arg_names["date"]: date,
+                  "matched_by_version": mbv}
     dict_input = {k: v for k, v in dict_input.items() if v}
     headers = {"X-API-KEY": api_key}
 
