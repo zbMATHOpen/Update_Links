@@ -9,7 +9,7 @@ partners = tuple(p.lower() for p in partners)
 config = configparser.ConfigParser()
 config.read("config.ini")
 username = config["DB"]["username"]
-password = config["DB"]["password"]
+password = config.get("DB","password",raw=True)
 host = config["DB"]["host"]
 db = config["DB"]["database"]
 
