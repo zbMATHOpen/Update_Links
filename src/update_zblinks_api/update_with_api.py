@@ -5,6 +5,8 @@ import pandas as pd
 import psycopg2
 from urllib.parse import urlencode
 
+from pkg_resources import get_distribution
+
 import importlib
 
 from update_zblinks_api import arg_names, params_dict, partners, link_url, \
@@ -50,7 +52,7 @@ def get_doc_ext_id_links():
     return df_zblinks_ext_id
 
 
-def post_request(input_data, partner):
+def post_request(input_data, partner, columns):
     """
     submits a link post request to the linksApi.
 
@@ -63,18 +65,19 @@ def post_request(input_data, partner):
         zblinks API partner; listed as 'type' in the document_external_ids
         table.
 
+    columns: list of strings
+        contains the column names of the input_data
+
     """
 
     date = ""
     mbv = ""
-    try:
-        date = input_data[3]
-    except IndexError:
-        pass
-    try:
-        mbv = input_data[4]
-    except IndexError:
-        pass
+    if "matched_at" in columns:
+        date = input_data["matched_at"]
+
+    if "matched_by_version" in columns:
+        mbv = input_data["matched_by_version"]
+
     dict_input = {arg_names["document"]: input_data[0],
                   arg_names["link_ext_id"]: input_data[1],
                   arg_names["link_partner"]: partner,
@@ -260,6 +263,10 @@ def update(file):
             partner, df_ext_partner, df_scrape
         )
 
+        dist = get_distribution("update-zblinks-api")
+        df_new["matched_by_version"] = dist.project_name + ":" + dist.version
+
+
         if file:
             df_new.to_csv(f"results/{partner}_new_links.csv", index=False)
             df_edit.to_csv(f"results/{partner}_to_edit.csv", index=False)
@@ -270,7 +277,7 @@ def update(file):
             df_delete = df_delete.fillna("")
 
             for _, row in df_new.iterrows():
-                post_request(row, partner)
+                post_request(row, partner, df_new.columns)
 
             for _, row in df_edit.iterrows():
                 update_request(row, partner)
@@ -301,7 +308,7 @@ def use_files_to_update():
             df_insert = pd.read_csv(insert_file)
             df_insert = df_insert.fillna("")
             for _, row in df_insert.iterrows():
-                post_request(row, partner)
+                post_request(row, partner, df_insert.columns)
         except FileNotFoundError:
             click.echo(f"Error: could not find {insert_file}.")
 

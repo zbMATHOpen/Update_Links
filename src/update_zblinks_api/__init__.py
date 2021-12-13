@@ -23,7 +23,7 @@ params_dict = {
 }
 
 # url for link requests
-link_url = config["zblinks"]["link_url"]
+link_url = config.get("zblinks","link_url",raw=True)
 
 arg_names = {
     "document": "DE number",
