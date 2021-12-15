@@ -91,5 +91,4 @@ def matrix_table_entries(partner, file):
              "matched_at", "matched_by_version"]
         ]
         for _, row in df_hist.iterrows():
-            post_request(row, partner)
-
+            post_request(row, partner, df_hist.columns)
