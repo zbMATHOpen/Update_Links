@@ -50,17 +50,17 @@ def scrape_page_2008_2010(
     if year == 2008:
         source = requests.get(
             "https://web.archive.org/web/20080812084157/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2009:
         source = requests.get(
             "https://web.archive.org/web/20091207124848/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2010:
         source = requests.get(
             "https://web.archive.org/web/20101119144452/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     html_text = source.text
     soup = BeautifulSoup(html_text, features="html.parser")
@@ -95,12 +95,12 @@ def scrape_page_2011_2012(
     if year == 2011:
         source = requests.get(
             "https://web.archive.org/web/20111021085410/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2012:
         source = requests.get(
             "https://web.archive.org/web/20121116035729/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     html_text = source.text
     soup = BeautifulSoup(html_text, features="html.parser")
@@ -136,37 +136,37 @@ def scrape_page_2013_2019(
     if year == 2013:
         source = requests.get(
             "https://web.archive.org/web/20131127014548/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2014:
         source = requests.get(
             "https://web.archive.org/web/20141127175811/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2015:
         source = requests.get(
             "https://web.archive.org/web/20151218103036/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2016:
         source = requests.get(
             "https://web.archive.org/web/20161230225724/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2017:
         source = requests.get(
             "https://web.archive.org/web/20171111221944/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2018:
         source = requests.get(
             "https://web.archive.org/web/20181010051553/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     if year == 2019:
         source = requests.get(
             "https://web.archive.org/web/20191218070644/http:"
-            "//dlmf.nist.gov/bib/" + "/" + letter
+            "//dlmf.nist.gov/bib/" + letter
         )
     html_text = source.text
     soup = BeautifulSoup(html_text, "html.parser")
@@ -196,7 +196,7 @@ def scrape_page_2020(
     if letter == "A":
         letter = ""
     source = requests.get("https://web.archive.org/web/20201230110228/https:"
-                          "//dlmf.nist.gov/bib" + "/" + letter
+                          "//dlmf.nist.gov/bib/" + letter
                           )
     html_text = source.text
     soup = BeautifulSoup(html_text, "html.parser")
