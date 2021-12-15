@@ -80,7 +80,6 @@ def matrix_table_entries(partner, file):
     """
     partner = partner.lower()
 
-    # this also creates the initial dataset for the zb_links.source table
     df_init_partner = hist_scrape_dict[partner]()
 
     df_hist = create_deids_table_dataset(partner, df_init_partner)
