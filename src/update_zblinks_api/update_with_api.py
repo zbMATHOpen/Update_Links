@@ -1,6 +1,5 @@
 import click
 import requests
-import os
 import pandas as pd
 import psycopg2
 from urllib.parse import urlencode
@@ -113,7 +112,7 @@ def update_request(input_data, partner):
                   arg_names["edit_link_ext_id"]: input_data[2],
                   "title": input_data[3]}
     dict_input = {k: v for k, v in dict_input.items() if v}
-    headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
+    headers = {"X-API-KEY": api_key}
 
     update_url = link_url + "/?" + urlencode(dict_input)
     requests.patch(update_url, headers=headers)
@@ -136,7 +135,7 @@ def delete_request(input_data, partner):
     dict_input = {arg_names["document"]: input_data[0],
                   arg_names["link_ext_id"]: input_data[1],
                   arg_names["link_partner"]: partner}
-    headers = {"X-API-KEY": os.getenv("ZBMATH_API_KEY")}
+    headers = {"X-API-KEY": api_key}
 
     delete_url = link_url + "/?" + urlencode(dict_input)
     requests.delete(delete_url, headers=headers)
