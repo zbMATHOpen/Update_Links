@@ -74,7 +74,7 @@ def remove_lonely_sources(this_partner):
     FROM zb_links.source AS src
     LEFT OUTER JOIN document_external_ids
     	ON src.id = document_external_ids.external_id
-        AND src.partner = document_external_ids.type
+        AND src.partner = document_external_ids.type::text
     WHERE src.partner = %(partner_arg)s
     AND document_external_ids.external_id IS NULL
     """
