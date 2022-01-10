@@ -1,7 +1,7 @@
 import pandas as pd
 import psycopg2
 
-from update_zblinks_api import params_dict
+from update_zblinks_api import get_connection_params_dict
 
 
 def get_des_from_zbl_ids(df_scrape):
@@ -23,6 +23,7 @@ def get_des_from_zbl_ids(df_scrape):
 
     zbl_id_tuple = tuple(df_scrape["zbl_code"].to_list())
 
+    params_dict = get_connection_params_dict()
     connection = psycopg2.connect(**params_dict)
 
     query_request = """
