@@ -8,8 +8,8 @@ from pkg_resources import get_distribution
 
 import importlib
 
-from update_zblinks_api import arg_names, params_dict, partners, link_url, \
-    api_key
+from update_zblinks_api import arg_names, get_key, get_link_url, \
+     get_connection_params_dict, partners
 from update_zblinks_api.helpers import dlmf_helpers, source_helpers
 
 scrape_dict = {}
@@ -33,6 +33,7 @@ def get_doc_ext_id_links():
         type is a listed zblinks API partner.
 
     """
+    params_dict = get_connection_params_dict()
     connection = psycopg2.connect(**params_dict)
 
     column_request = """
@@ -84,8 +85,10 @@ def post_request(input_data, partner, columns):
                   arg_names["date"]: date,
                   "matched_by_version": mbv}
     dict_input = {k: v for k, v in dict_input.items() if v}
+    api_key = get_key()
     headers = {"X-API-KEY": api_key}
 
+    link_url = get_link_url()
     post_url = link_url + "/?" + urlencode(dict_input)
     requests.post(post_url, headers=headers)
 
@@ -112,8 +115,10 @@ def update_request(input_data, partner):
                   arg_names["edit_link_ext_id"]: input_data[2],
                   "title": input_data[3]}
     dict_input = {k: v for k, v in dict_input.items() if v}
+    api_key = get_key()
     headers = {"X-API-KEY": api_key}
 
+    link_url = get_link_url()
     update_url = link_url + "/?" + urlencode(dict_input)
     requests.patch(update_url, headers=headers)
 
@@ -135,8 +140,10 @@ def delete_request(input_data, partner):
     dict_input = {arg_names["document"]: input_data[0],
                   arg_names["link_ext_id"]: input_data[1],
                   arg_names["link_partner"]: partner}
+    api_key = get_key()
     headers = {"X-API-KEY": api_key}
 
+    link_url = get_link_url()
     delete_url = link_url + "/?" + urlencode(dict_input)
     requests.delete(delete_url, headers=headers)
 

@@ -1,7 +1,7 @@
 
 import pandas as pd
 import psycopg2
-from update_zblinks_api import params_dict
+from update_zblinks_api import get_connection_params_dict
 
 def get_titles(df_link, this_partner):
     """
@@ -24,6 +24,7 @@ def get_titles(df_link, this_partner):
 
     """
 
+    params_dict = get_connection_params_dict()
     connection = psycopg2.connect(**params_dict)
 
     query_request = """
@@ -67,6 +68,7 @@ def remove_lonely_sources(this_partner):
         name of zbMATH partner.
 
     """
+    params_dict = get_connection_params_dict()
     connection = psycopg2.connect(**params_dict)
 
     query_request = """
