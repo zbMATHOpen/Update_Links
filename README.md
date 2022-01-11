@@ -17,6 +17,9 @@ On a first install:
 
 
 2) Fill in the `config_template.ini` and save it as `config.ini`.
+Default for config file is `\etc\update_zblinks_api`.
+Alternately, set the location of the config.ini file in the environment variable
+`UPDATE_API_CONFIG`.
 
     (i) The URL should be the endpoint for link items, e.g.,
     http://my_host/links_api/link/item
