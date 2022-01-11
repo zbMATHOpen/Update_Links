@@ -1,4 +1,5 @@
 import configparser
+import os
 
 
 # tuple of all partners for zblinks API
@@ -14,7 +15,10 @@ arg_names = {
 }
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config_path = os.getenv(
+    "UPDATE_API_CONFIG", "/etc/update_zblinks_api/config.ini"
+)
+config.read(config_path)
 
 
 def get_connection_params_dict():
